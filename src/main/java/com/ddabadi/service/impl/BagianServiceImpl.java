@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by deddy on 4/28/16.
  */
@@ -44,5 +46,17 @@ public class BagianServiceImpl implements BagianService {
         bagianEdit.setKode(bagian.getKode());
         bagianEdit.setDirektorat(bagian.getDirektorat());
         return repository.saveAndFlush(bagianEdit);
+    }
+
+    @Override
+    public Bagian getByKode(String kode) {
+        Bagian bagian = null;
+        List<Bagian> bagians = repository.findByKode(kode);
+        if(bagians.size()==0){
+            // bagian tidak ada
+        }else{
+            bagian = bagians.iterator().next();
+        }
+        return bagian;
     }
 }

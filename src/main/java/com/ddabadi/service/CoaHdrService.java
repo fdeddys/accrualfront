@@ -13,6 +13,7 @@ public interface CoaHdrService {
     boolean isKodeExis(String kode);
     CoaHdr save(CoaHdr coaHdr);
     CoaHdr update(Long id,CoaHdr coaHdr);
+    String getBagianById(Long id);
 
 
 }

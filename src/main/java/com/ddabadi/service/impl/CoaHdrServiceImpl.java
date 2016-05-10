@@ -1,7 +1,10 @@
 package com.ddabadi.service.impl;
 
+import com.ddabadi.domain.CoaDtl;
 import com.ddabadi.domain.CoaHdr;
+import com.ddabadi.domain.repository.CoaDtlRepository;
 import com.ddabadi.domain.repository.CoaHdrRepository;
+import com.ddabadi.service.CoaDtlService;
 import com.ddabadi.service.CoaHdrService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class CoaHdrServiceImpl implements CoaHdrService {
 
     @Autowired private CoaHdrRepository repository;
+    @Autowired private CoaDtlService coaDtlService;
     private Logger logger = Logger.getLogger(CoaHdrService.class);
 
     @Override
@@ -51,7 +55,15 @@ public class CoaHdrServiceImpl implements CoaHdrService {
         CoaHdr coaHdrUpdate = repository.findOne(id);
         coaHdrUpdate.setKodeAccount(coaHdr.getKodeAccount());
         coaHdrUpdate.setNamaAccount(coaHdr.getNamaAccount());
+        coaHdrUpdate.setKodeBagian(coaHdr.getKodeBagian());
         return repository.saveAndFlush(coaHdrUpdate);
     }
+
+    @Override
+    public String getBagianById(Long id) {
+        CoaHdr coaHdr = repository.findOne(id);
+        return coaHdr.getKodeBagian();
+    }
+
 
 }

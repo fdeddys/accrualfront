@@ -20,6 +20,17 @@ public class CoaHdr {
     @Column(name = "kode", length = 20)
     private String kodeAccount;
 
+    @Column(name = "kode_bagian", length = 10)
+    private String kodeBagian;
+
+    public String getKodeBagian() {
+        return kodeBagian;
+    }
+
+    public void setKodeBagian(String kodeBagian) {
+        this.kodeBagian = kodeBagian;
+    }
+
     public long getIdAccountHdr() {
         return idAccountHdr;
     }

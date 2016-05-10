@@ -27,7 +27,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
     @Override
     public Page<JurnalHeader> getByIdUserTanggal(Long idUser, Date tgl1, Date tgl2, int hal, int jumlah) {
         logger.info("get by id User");
-        PageRequest pageRequest = new PageRequest(hal, jumlah, Sort.Direction.ASC,"id");
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"id");
         return repository.findByIdfindByIdTanggal(tgl1, tgl2,idUser, pageRequest);
     }
 
@@ -36,10 +36,10 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
         logger.info("get by id jurnal - id User");
         JurnalHeader jurnalHeader = null;
         jurnalHeader= repository.findOne(idJurnal);
-        if(jurnalHeader.equals(null)){
+        if(jurnalHeader==null){
             // jurnal tidak ketemu
         }else   {
-            if(jurnalHeader.getId()==idUser){
+            if(jurnalHeader.getUser().getId()==idUser){
                 //jurnal header milik id user
             }else   {
                 // jurnal header milik id user LAIN
@@ -58,14 +58,14 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
     @Override
     public Page<JurnalHeader> getByTanggalIssuePage(Date tgl1, Date tgl2, int hal, int jumlah) {
         logger.info("get by tanggal issue");
-        PageRequest pageRequest = new PageRequest(hal, jumlah, Sort.Direction.ASC,"id");
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"id");
         return repository.findByTanggalIssue(tgl1,tgl1,pageRequest);
 
     }
 
     @Override
     public JurnalHeader save(JurnalHeader jurnalHeader) {
-        return null;
+        return repository.saveAndFlush(jurnalHeader);
     }
 
     @Override

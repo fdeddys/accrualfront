@@ -14,5 +14,6 @@ public interface BagianService {
     public Bagian getById(Long id);
     public Bagian save(Bagian bagian);
     public Bagian update(Long idEdit, Bagian bagian);
+    public Bagian getByKode(String kode);
 
 }

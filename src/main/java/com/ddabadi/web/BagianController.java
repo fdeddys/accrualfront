@@ -1,10 +1,14 @@
 package com.ddabadi.web;
 
 import com.ddabadi.domain.Bagian;
+import com.ddabadi.exception.BagianNotFoundException;
+import com.ddabadi.exception.InvalidKarakterException;
+import com.ddabadi.message.MessageByLocaleService;
 import com.ddabadi.service.BagianService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -17,10 +21,16 @@ public class BagianController {
 
     @Autowired private BagianService bagianService;
     private Logger logger = Logger.getLogger(BagianController.class);
+    @Autowired
+    MessageByLocaleService messageByLocaleService;
 
     @RequestMapping(value = "new")
     public Bagian newValue(){
-        return new Bagian();
+        if(true){
+            throw new BagianNotFoundException(0);
+        }else{
+            return new Bagian();
+        }
     }
 
     @RequestMapping(value = "hal/{hal}/jumlah/{jumlah}")
@@ -36,14 +46,22 @@ public class BagianController {
                                    @PathVariable("hal")int hal,
                                    @PathVariable("jumlah")int jumlah){
 
-        return bagianService.getByKodeByNamaPage("kode","nama",hal,jumlah);
+        return bagianService.getByKodeByNamaPage("kode", "nama", hal, jumlah);
     }
 
     @RequestMapping(value = "id/{id}")
-    public Bagian getById(@PathVariable("id")Long id){
+    public Bagian getById(@PathVariable("id")Long id) {
 
-        return bagianService.getById(id);
+
+        if( id==0){
+            //throw new BagianNotFoundException(id.intValue());
+            String pesan = messageByLocaleService.getMessage("bagian.tidak.ditemukan");
+            throw new InvalidKarakterException(pesan);
+        }else{
+            return bagianService.getById(id);
+        }
     }
+
 
     @RequestMapping(value = "kode/{kode}/hal/{hal}/jumlah/{jumlah}")
     public Page<Bagian> getByKode(@PathVariable("kode")String kode,

@@ -79,7 +79,14 @@ public class CoaHdrController {
     public CoaHdr simpan(@PathVariable("id")Long id, @RequestBody CoaHdr coaHdr){
 
         logger.info("update");
-        return coaHdrService.update(id,coaHdr);
+        return coaHdrService.update(id, coaHdr);
+    }
+
+
+    @RequestMapping(value = "/GetBagian/id/{id}")
+    public String getKodeBagianByCoaDetil(@PathVariable("id")Long id){
+        logger.info("cek bagian by ");
+        return coaHdrService.getBagianById(id);
     }
 
 }
