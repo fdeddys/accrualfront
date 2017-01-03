@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface BagianRepository extends JpaRepository<Bagian, Long> {
 
+    Page<Bagian> findByNamaLikeAndKodeLike(String nama, String kode, Pageable pageable);
+
     @Query(value = "select b from Bagian b where b.nama like :cariNama and b.kode like :cariKode ")
     Page<Bagian> findByNamaKodePage(@Param("cariNama")String cariNama,
                                     @Param("cariKode")String cariKode,

@@ -44,5 +44,21 @@ public class RestExceptionProcessor {
         return new ErrorInfo(errorURL, errorMessage);
     }
 
+    @ExceptionHandler(VoucherBelumPostingException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorInfo belumPostingErr(HttpServletRequest req, VoucherBelumPostingException ex){
+        String errUrl = req.getRequestURL().toString();
+        return new ErrorInfo(errUrl,"Ada Voucher belum posting");
+    }
+
+    @ExceptionHandler(InvalidDateException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorInfo tglError(HttpServletRequest req, InvalidDateException ex){
+        String errUrl = req.getRequestURL().toString();
+        return new ErrorInfo(errUrl,"Tangal tidak valid");
+    }
+
 
 }

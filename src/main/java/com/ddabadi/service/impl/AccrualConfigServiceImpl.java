@@ -33,6 +33,7 @@ public class AccrualConfigServiceImpl implements AccrualConfigService {
             accrualConfig.setHeaderPembayaran("");
             accrualConfig.setHeaderPemindahan("");
             accrualConfig.setHeaderPenerimaan("");
+            accrualConfig.setBulanTahunBerjalan("");
             accrualConfig=repository.saveAndFlush(accrualConfig);
         }
 
@@ -56,7 +57,7 @@ public class AccrualConfigServiceImpl implements AccrualConfigService {
         accrualConfig.setHeaderPembayaran(accrualConfigUpdate.getHeaderPembayaran());
         accrualConfig.setHeaderPemindahan(accrualConfigUpdate.getHeaderPemindahan());
         accrualConfig.setHeaderPenerimaan(accrualConfigUpdate.getHeaderPenerimaan());
-
+        accrualConfig.setBulanTahunBerjalan(accrualConfigUpdate.getBulanTahunBerjalan());
         //if(databaru==true){
         accrualConfig=repository.saveAndFlush(accrualConfig);
         //}

@@ -15,4 +15,6 @@ public interface DirektoratRepository extends JpaRepository<Direktorat,Long> {
     @Query(value = "select  d from Direktorat d where d.nama like :cariNama")
     List<Direktorat> findByNama(@Param("cariNama")String cariNama);
 
+    List<Direktorat> findByKode(String kode);
+
 }

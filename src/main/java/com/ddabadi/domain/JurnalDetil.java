@@ -18,9 +18,9 @@ public class JurnalDetil {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "jurnalHeader")
-    private JurnalHeader jurnalHeader;
+//    @ManyToOne
+//    @JoinColumn(name = "jurnalHeader")
+//    private JurnalHeader  jurnalHeader;
 
     @OneToOne
     @JoinColumn(name = "account_detil")
@@ -50,14 +50,16 @@ public class JurnalDetil {
     @JoinColumn(name = "customer")
     private Customer customer;
 
-    @Column(name = "d_k")
-    private DebetKredit dk;
 
     @Column(name = "jumlah")
     private Double jumlah;
 
     @Column(name = "tipe_voucher")
     private JenisVoucher tipeVoucher;
+
+    @ManyToOne
+    @JoinColumn(name = "jurnalHdr")
+    private JurnalHeader jurnalHeader;
 
     public Long getId() {
         return id;
@@ -139,13 +141,6 @@ public class JurnalDetil {
         this.customer = customer;
     }
 
-    public DebetKredit getDk() {
-        return dk;
-    }
-
-    public void setDk(DebetKredit dk) {
-        this.dk = dk;
-    }
 
     public Double getJumlah() {
         return jumlah;

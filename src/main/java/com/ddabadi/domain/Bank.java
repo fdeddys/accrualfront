@@ -31,6 +31,17 @@ public class Bank {
     @Column(name = "status")
     private Status status;
 
+    @Column(name ="kota", length = 50)
+    private String kota;
+
+    public String getKota() {
+        return kota;
+    }
+
+    public void setKota(String kota) {
+        this.kota = kota;
+    }
+
     public Long getId() {
         return id;
     }

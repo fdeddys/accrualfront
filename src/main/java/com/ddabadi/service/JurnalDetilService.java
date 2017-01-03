@@ -1,10 +1,12 @@
 package com.ddabadi.service;
 
-import com.ddabadi.domain.JurnalDetil;
-import com.ddabadi.domain.JurnalHeader;
+import com.ddabadi.domain.*;
 import com.ddabadi.dto.JurnalDetilDto;
+import com.ddabadi.enumer.JenisVoucher;
+import com.ddabadi.enumer.StatusVoucher;
 import org.springframework.data.domain.Page;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +17,23 @@ public interface JurnalDetilService {
     JurnalDetil getById(Long id);
     List<JurnalDetil> getByJurnalHdrId(Long jurnalHdrId);
     Page<JurnalDetil> getByJurnalHdrIdPage(Long jurnalHdrId,int hal, int jumlah);
+
+    // untuk jurnal balik
+    Page<JurnalDetil> getByJurnalKreditHdrIdPage(Long jurnalHdrId,int hal, int jumlah);
+    JurnalDetil getByJurnalDebetFirst(Long jurnalHdrId);
+
     JurnalDetil save(JurnalDetilDto jurnalDetilDto);
+    JurnalDetil saveJurnalDetil(JurnalDetil jurnalDetil);
     public Integer delete(Long idJurnalDetil);
+
+    //untuk proses tutup bulan
+    List<JurnalDetil> getByCoaTglIssue(CoaDtl coaDtl, Date tgl1, Date tgl2);
+    List<JurnalDetil> getByCoaBagianTglIssue(CoaDtl coaDtl, Bagian bagian,Date tgl1, Date tgl2);
+
+    //narik daftar jurnal untuk proses surat transfer
+    Page<JurnalDetil> getVoucherSuratTransfer( int hal, int jumlah);
+
+    Double getTotalDebet(Long idHdr);
+    Double getTotalKredit(Long idHdr);
 
 }

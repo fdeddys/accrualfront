@@ -1,15 +1,24 @@
 package com.ddabadi.web;
 
+import com.ddabadi.Report.ReportController;
 import com.ddabadi.domain.Bagian;
+import com.ddabadi.domain.Parameter;
 import com.ddabadi.exception.BagianNotFoundException;
 import com.ddabadi.exception.InvalidKarakterException;
 import com.ddabadi.message.MessageByLocaleService;
 import com.ddabadi.service.BagianService;
+import com.ddabadi.service.ParameterService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by deddy on 4/29/16.
@@ -23,6 +32,7 @@ public class BagianController {
     private Logger logger = Logger.getLogger(BagianController.class);
     @Autowired
     MessageByLocaleService messageByLocaleService;
+    @Autowired private ParameterService parameterService;
 
     @RequestMapping(value = "new")
     public Bagian newValue(){
@@ -71,6 +81,13 @@ public class BagianController {
         return bagianService.getByKodeByNamaPage(kode, "%", hal, jumlah);
     }
 
+
+    @RequestMapping(value = "isKodeExist/{kode}")
+    public boolean isKodeBagianAda(@PathVariable("kode")String kode){
+        return bagianService.isKodeExist(kode.trim());
+    }
+
+
     @RequestMapping(value = "nama/{nama}/hal/{hal}/jumlah/{jumlah}")
     public Page<Bagian> getByNama(@PathVariable("nama")String nama,
                             @PathVariable("hal")int hal,
@@ -94,5 +111,22 @@ public class BagianController {
 
         return bagianService.update(idEdit, bagian);
     };
+
+    @RequestMapping(value = "laporan",
+                    method = RequestMethod.GET)
+    public void laporanMasterBagian(HttpServletResponse response){
+
+        Parameter parameter = parameterService.get();
+        List<Bagian> bagians = bagianService.getAll();
+                //new ArrayList<Bagian>();
+        Map<String,Object> maps=new HashMap<String, Object>();
+        maps.put("h1",parameter.getH1().trim());
+        maps.put("h2",parameter.getH2().trim());
+        maps.put("h3",parameter.getH3().trim());
+        maps.put("h4",parameter.getH4().trim());
+
+        ReportController report= new ReportController();
+        report.previewReport("/report/master/MstBagian.jasper",maps,bagians,"laporan", response);
+    }
 
 }

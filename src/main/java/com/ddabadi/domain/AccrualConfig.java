@@ -33,6 +33,17 @@ public class AccrualConfig {
     @Column(name = "coa_jurnal_balik", length = 10)
     private String coaJurnalBalik;
 
+    @Column(name="bulanTahunBerjalan", length = 6)
+    private String bulanTahunBerjalan;
+
+    public String getBulanTahunBerjalan() {
+        return bulanTahunBerjalan;
+    }
+
+    public void setBulanTahunBerjalan(String bulanTahunBerjalan) {
+        this.bulanTahunBerjalan = bulanTahunBerjalan;
+    }
+
     public Long getId() {
         return id;
     }

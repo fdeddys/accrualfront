@@ -14,12 +14,12 @@ import java.util.List;
  */
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    @Query(value = "select c from Customer c where c.nama like :cariNama and c.kode like :cariKode ")
+    @Query(value = "select c from Customer c where c.nama like :cariNama and c.kode like :cariKode and c.isSupplier <> true ")
     Page<Customer> findByNamaKodePage(@Param("cariNama")String cariNama,
                                       @Param("cariKode")String cariKode,
                                       Pageable pageable);
 
-    @Query(value = "select c from Customer c where c.nama like :cariNama and c.kode like :cariKode ")
+    @Query(value = "select c from Customer c where c.nama like :cariNama and c.kode like :cariKode  and c.isSupplier <> true ")
     List<Customer> findByNamaKodeList(@Param("cariNama")String cariNama,
                                       @Param("cariKode")String cariKode);
 

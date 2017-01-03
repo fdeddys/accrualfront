@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by deddy on 5/3/16.
  */
@@ -17,5 +19,6 @@ public interface CoaHdrRepository extends JpaRepository<CoaHdr,Long> {
     Page<CoaHdr> getByKodeByNamaPage(@Param("cariKode")String cariKode,
                                      @Param("cariNama")String cariNama,
                                      Pageable pageable);
+
 
 }

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MstCoa" pageWidth="842" pageHeight="300" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="832" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="422fa2f3-fc42-47ea-bcaf-80e0300c9752">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="700"/>
+	<property name="ireport.y" value="65"/>
+	<parameter name="h1" class="java.lang.String"/>
+	<parameter name="h2" class="java.lang.String"/>
+	<parameter name="h3" class="java.lang.String"/>
+	<parameter name="h4" class="java.lang.String"/>
+	<field name="keterangan" class="java.lang.String"/>
+	<field name="jumlah" class="java.lang.Double"/>
+	<field name="jurnalHeader.jenisVoucher" class="java.lang.Object"/>
+	<field name="accountDetil.kodePerkiraan" class="java.lang.String"/>
+	<field name="accountDetil.namaPerkiraan" class="java.lang.String"/>
+	<field name="debet" class="java.lang.Double"/>
+	<field name="bagian.kode" class="java.lang.String"/>
+	<field name="kredit" class="java.lang.Double"/>
+	<field name="bank.kode" class="java.lang.String"/>
+	<field name="rel" class="java.lang.String"/>
+	<field name="customer.kode" class="java.lang.String"/>
+	<field name="jurnalHeader.noUrut" class="java.lang.String"/>
+	<field name="jurnalHeader.diBayar" class="java.lang.String"/>
+	<field name="jurnalHeader.noVoucher" class="java.lang.String"/>
+	<field name="jurnalHeader.issueDate" class="java.util.Date"/>
+	<field name="jurnalHeader.bookingDate" class="java.util.Date"/>
+	<variable name="total" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{kredit}+$F{debet}]]></variableExpression>
+	</variable>
+	<variable name="totDebet" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{debet}]]></variableExpression>
+	</variable>
+	<variable name="totKredit" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{kredit}]]></variableExpression>
+	</variable>
+	<variable name="jamCetak" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="73" y="2" width="673" height="27" uuid="f4aaba8e-32a0-4a2d-bb22-08152196b3c5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VOUCHER " + $F{jurnalHeader.jenisVoucher}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="1" width="139" height="12" uuid="488aa41c-15e3-4916-be78-1c2bcbb4bed2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurnalHeader.noUrut}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="1" width="79" height="12" uuid="b1bdbc55-7bd1-4c51-803c-292311d9235b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No urut]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="13" width="79" height="12" uuid="fc3a3392-5c6e-404a-b2e0-315baf57d621"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bayar kepada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="89" y="13" width="17" height="12" uuid="2ecbb336-73ad-47b3-b623-ffe02f8bcac5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="89" y="1" width="17" height="12" uuid="a3349e39-6614-489f-a407-dd656adb3daa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="106" y="13" width="139" height="12" uuid="03caadb7-6cc4-40a1-83f2-194672ce143c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurnalHeader.diBayar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="575" y="2" width="78" height="12" uuid="97b1a5df-55f0-460f-b140-4a32e6330beb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No voucher]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="653" y="2" width="17" height="12" uuid="e38ccaae-26d8-4cc0-82c4-21227faf72ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="575" y="13" width="78" height="12" uuid="90b5afcc-1c3d-44ca-b8de-7af0d61dea7a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Issue date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="575" y="25" width="78" height="12" uuid="ca61e793-1f9f-49e1-8ff1-25cf8abb37fb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Booking date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="653" y="13" width="17" height="12" uuid="3b8639e1-c216-4be4-9bdc-3f35110a478f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="653" y="25" width="17" height="12" uuid="c3c7296f-d254-4cb8-8d8f-85e3ed9d8140"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="670" y="2" width="148" height="12" uuid="27335c9f-0083-4770-837a-0f75bb9e98ae"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurnalHeader.noVoucher}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement x="670" y="13" width="147" height="12" uuid="f76e5a68-0c54-4683-bbf1-81fe7bbef44f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurnalHeader.issueDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement x="670" y="25" width="147" height="12" uuid="b210a6fd-2aab-4747-b746-6bdde3f08601"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurnalHeader.bookingDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<rectangle>
+				<reportElement x="6" y="2" width="818" height="11" uuid="a240e76b-0a89-4a1d-a60c-9b296c95c38b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="293" y="2" width="234" height="11" uuid="6bbb493e-67c2-4697-bbf6-12b9c0477a74"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="527" y="2" width="86" height="11" uuid="c0c9ffd5-5fd8-4d3d-a868-7521fa118c32"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nilai]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="2" width="42" height="11" uuid="902f2833-5673-4265-a87c-bfb7538a8aa3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[D/K]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="2" width="48" height="11" uuid="9625739b-fba2-4e58-9c4e-34f0605defee"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Account]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="2" width="109" height="11" uuid="608e736a-d025-460c-9e27-f0078d5775a2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nama ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="2" width="72" height="11" uuid="21553191-d787-4227-96c2-4db302abc297"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bagian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="613" y="2" width="51" height="11" uuid="9341ab73-dcb8-4e8e-a7f3-e2314979a7ad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Kas/Bank]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="664" y="2" width="80" height="11" uuid="5d7bd4b9-5789-4448-af85-c9a1b5fdfc58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Rel No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="744" y="2" width="74" height="11" uuid="3b054a17-d438-4445-aec1-d2d049f17b07"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Cust]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField>
+				<reportElement x="293" y="0" width="234" height="10" uuid="f85b90bf-43fd-494b-b26a-e2a4bcba4a02"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="0" width="42" height="10" uuid="d7b6d4e5-f845-4802-9fa6-763dca9e9414"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{debet}==0D ? "K" : "D" )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="0" width="48" height="10" uuid="c7a57d1b-2cb5-4946-9947-808da4a670e2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountDetil.kodePerkiraan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="0" width="109" height="10" uuid="8afcb238-0167-4f9e-a234-989442d2fc07"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{accountDetil.namaPerkiraan}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="0" width="72" height="10" uuid="c73653c0-3b3b-4538-88e9-4f37d787d41c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bagian.kode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="527" y="0" width="86" height="10" uuid="af69a563-5afd-41c9-ad0f-29f9ea116157"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="613" y="0" width="51" height="10" uuid="3889d53c-6b1f-42c8-8221-21bd1f7372f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bank.kode}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="664" y="0" width="80" height="10" uuid="0c8e94af-42a6-47f4-a879-f65475d08dec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="744" y="0" width="74" height="10" uuid="f94d420a-571e-4281-bbae-248d4fafc858"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customer.kode}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<textField>
+				<reportElement x="744" y="5" width="51" height="11" uuid="83ee6ede-b5fe-4443-b5fd-6f3cd0c97087"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="796" y="5" width="21" height="11" uuid="034dc260-cff2-4d5e-b4d5-f6fedbca9dd2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="63" y="5" width="84" height="11" uuid="c6ca87c0-56b7-4772-bc45-7f30a7a39fdd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totDebet}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="197" y="5" width="84" height="11" uuid="33ae8d7f-86e1-459b-81c1-80a928a3d775"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totKredit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="5" width="53" height="11" uuid="d51f3493-1893-42f0-8d97-c0ad461b0294"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total Debet :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="5" width="50" height="11" uuid="7d0ba51f-96d6-4cb4-9159-27465a9b5566"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total Kredit :]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMMM yyyy HH:mm:ss">
+				<reportElement x="613" y="5" width="133" height="10" uuid="b2cccc56-2373-4589-9b7d-04b594e20e7a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{jamCetak}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="281" y="5" width="83" height="11" uuid="d37832c4-91c7-4493-8189-c760d2b7bf88"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

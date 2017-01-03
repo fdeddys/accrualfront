@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tb_coa_dtl")
-public class CoaDtl {
+public class    CoaDtl {
 
     @Id
     @GeneratedValue
@@ -33,7 +33,18 @@ public class CoaDtl {
     @Column(name = "cash_bank")
     private Boolean cashBank;
 
-//    accountHeader: {
+    @Column(name = "is_Debet")
+    private Boolean isDebet;
+
+    public Boolean getIsDebet() {
+        return isDebet;
+    }
+
+    public void setIsDebet(Boolean isDebet) {
+        this.isDebet = isDebet;
+    }
+
+    //    accountHeader: {
 //        idAccountHdr: 0,
 //                namaAccount: "",
 //                kodeAccount: ""

@@ -78,4 +78,14 @@ public class UserController {
         return userService.update(id, user);
     }
 
+
+    @RequestMapping(method = RequestMethod.GET,
+                    value = "idAdm/{nama}")
+    public Boolean isAdmin(@PathVariable("nama")String nama){
+
+        logger.info("is admin");
+        return userService.isAdmin(nama);
+    }
+
+
 }

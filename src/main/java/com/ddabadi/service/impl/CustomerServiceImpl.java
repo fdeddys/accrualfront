@@ -80,8 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerEdit.setNamaBank(customer.getNamaBank());
         customerEdit.setNoRekening(customer.getNoRekening());
         customerEdit.setNpwp(customer.getNpwp());
-        customerEdit.setKode(customer.getKode());
+        //customerEdit.setKode(customer.getKode());
         customerEdit.setTelp(customer.getTelp());
+        customerEdit.setKotaBank(customer.getKotaBank());
 
         return repository.saveAndFlush(customerEdit);
     }

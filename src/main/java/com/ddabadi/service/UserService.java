@@ -18,5 +18,5 @@ public interface UserService {
     public User getById(Long id);
     public User save(User user);
     public User update(Long idEdit, User user);
-
+    public Boolean isAdmin(String nama);
 }

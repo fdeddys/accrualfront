@@ -31,7 +31,11 @@ public class CoaHdrController {
                                       @PathVariable("jumlah")int jumlah){
 
         logger.info("get by kode page");
-        return coaHdrService.getByKodeByNamaPage("%"+kode+"%","%",hal,jumlah);
+        if(kode.trim().equals("--")){
+            return getAllPage(hal,jumlah);
+        }else{
+            return coaHdrService.getByKodeByNamaPage("%"+kode+"%","%",hal,jumlah);
+        }
     }
 
     @RequestMapping(value = "/nama/{nama}/hal/{hal}/jumlah/{jumlah}")
@@ -49,8 +53,20 @@ public class CoaHdrController {
                                       @PathVariable("hal")int hal,
                                       @PathVariable("jumlah")int jumlah){
 
+        String kriteriaKode ;
+        String kriteriaNama ;
         logger.info("get by kode+nama page");
-        return coaHdrService.getByKodeByNamaPage("%"+kode+"%","%"+nama+"%",hal,jumlah);
+        if(kode.equals("--")){
+            kriteriaKode="%";
+        }else{
+            kriteriaKode="%"+kode+"%";
+        }
+        if(nama.equals("--")){
+            kriteriaNama="%";
+        }else{
+            kriteriaNama="%"+nama+"%";
+        }
+        return coaHdrService.getByKodeByNamaPage(kriteriaKode,kriteriaNama,hal,jumlah);
     }
 
     @RequestMapping(value = "/id/{id}")

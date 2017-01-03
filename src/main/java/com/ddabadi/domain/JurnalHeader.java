@@ -18,6 +18,8 @@ public class JurnalHeader {
     @Column(name = "id")
     private Long id;
 
+    // per tahun
+    // per user
     @Column(name = "no_urut", length = 100)
     private String noUrut;
 
@@ -29,6 +31,11 @@ public class JurnalHeader {
     @Temporal(TemporalType.DATE)
     private Date bookingDate;
 
+    // per bulan
+    // sesuai jenis voucher
+    // B00001 Bayar
+    // T00001 Penerimaan
+    // P00001 Pemindahan
     @Column(name = "no_voucher", length = 100)
     private String noVoucher;
 
@@ -43,6 +50,28 @@ public class JurnalHeader {
 
     @OneToOne
     private User user;
+
+    @Column(name = "is_tarik_pembayaran", columnDefinition = "boolean default false")
+    private boolean isTarikPembayaran = false;
+
+    @Column(name = "is_validasi_pembayaran", columnDefinition = "boolean default false")
+    private boolean isValidasiPembayaran = false;
+
+    public boolean isValidasiPembayaran() {
+        return isValidasiPembayaran;
+    }
+
+    public void setIsValidasiPembayaran(boolean isValidasiPembayaran) {
+        this.isValidasiPembayaran = isValidasiPembayaran;
+    }
+
+    public boolean isTarikPembayaran() {
+        return isTarikPembayaran;
+    }
+
+    public void setIsTarikPembayaran(boolean isTarikPembayaran) {
+        this.isTarikPembayaran = isTarikPembayaran;
+    }
 
     public Long getId() {
         return id;

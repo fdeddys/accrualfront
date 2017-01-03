@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="surat_Transfer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aa786553-642d-4366-b6e9-d3e194bb71b7">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="336"/>
+	<style name="header" fontName="Serif" fontSize="10"/>
+	<style name="isi" fontSize="9"/>
+	<style name="foot" fontSize="8"/>
+	<parameter name="h1" class="java.lang.String"/>
+	<parameter name="h2" class="java.lang.String"/>
+	<parameter name="h3" class="java.lang.String"/>
+	<parameter name="h4" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="suratTransferHd.bank.nama" class="java.lang.String"/>
+	<field name="suratTransferHd.tglSurat" class="java.util.Date"/>
+	<field name="jurnalDetil.kredit" class="java.lang.Double"/>
+	<field name="suratTransferHd.noApprove" class="java.lang.String"/>
+	<field name="suratTransferHd.noCek" class="java.lang.String"/>
+	<field name="suratTransferHd.bank.namaCabangBank" class="java.lang.String"/>
+	<field name="suratTransferHd.bank.kota" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.namaCabangBank" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.kotaBank" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.namaBank" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.nama" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.kode" class="java.lang.String"/>
+	<field name="jurnalDetil.customer.noRekening" class="java.lang.String"/>
+	<variable name="nomor" class="java.lang.Integer" incrementType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{id}]]></variableExpression>
+	</variable>
+	<variable name="totalBelanja" class="java.lang.Long" incrementType="Column">
+		<variableExpression><![CDATA[$F{jurnalDetil.kredit}.longValue()]]></variableExpression>
+	</variable>
+	<variable name="pageOf" class="java.lang.String">
+		<variableExpression><![CDATA["Hal " + $V{PAGE_NUMBER} + "  of " + $V{PAGE_COUNT}]]></variableExpression>
+	</variable>
+	<variable name="tanggal" class="java.lang.String">
+		<variableExpression><![CDATA[new SimpleDateFormat("yyyy/MM/dd").format(new Date())]]></variableExpression>
+	</variable>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{id}.intValue()==0L]]></printWhenExpression>
+			<staticText>
+				<reportElement mode="Transparent" x="44" y="16" width="467" height="770" forecolor="#DBE7EA" uuid="c6477dcc-a216-4298-bdcd-bdaaa5a1e3af"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="54" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C
+O
+N
+F
+I
+D
+E
+N
+T
+I
+A
+L]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="241" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="14" width="555" height="28" uuid="8554cd1b-779e-4387-b895-df4145ddc459"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SURAT TRANSFER]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="252" height="14" uuid="60675239-eb09-4054-bc94-697916ffd40d"/>
+				<textFieldExpression><![CDATA[$P{h1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="14" width="252" height="14" uuid="b8f64d16-a832-44d0-a66d-54539ab86bd8"/>
+				<textFieldExpression><![CDATA[$P{h2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="28" width="252" height="14" uuid="8c31b8e9-dfc7-4b18-aa60-7bd895c89000"/>
+				<textFieldExpression><![CDATA[$P{h3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="42" width="252" height="14" uuid="3f483c7b-6133-49e2-8e52-88b3f397eda4"/>
+				<textFieldExpression><![CDATA[$P{h4}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="64" width="555" height="1" uuid="3f729ac3-c84c-4e0e-b86b-81738418d6d9"/>
+			</line>
+			<staticText>
+				<reportElement style="header" x="15" y="72" width="100" height="20" uuid="ebfe3b23-698d-4e87-9987-606b5c13be4b"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Kepada Yth]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="header" x="15" y="112" width="256" height="20" uuid="e348a1b3-1491-4be6-80e2-86e804dd209b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{suratTransferHd.bank.namaCabangBank}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="header" x="15" y="132" width="256" height="20" uuid="ba64155a-1f0a-4b9f-8714-9f1286ae8076"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{suratTransferHd.bank.kota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="header" x="35" y="166" width="510" height="16" uuid="2b9c008c-947a-4d54-8cbe-38b2ffe6ae18"/>
+				<text><![CDATA[Perihal  :  Pemindahan / Transfer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="header" x="15" y="185" width="413" height="12" uuid="e1130735-4e48-4ba0-9748-8fffbdac2408"/>
+				<text><![CDATA[Dengan Hormat,]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="15" y="92" width="256" height="20" uuid="3b824e3c-5923-41d4-ab5f-aee6d2052f17"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Saudara Pimpinan " + $F{suratTransferHd.bank.nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="header" x="15" y="201" width="530" height="37" uuid="bfdd7817-2109-4da1-bb16-dcbf5b268165"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["Bersamaan ini kami mohon bantuan bapak / ibu untuk memindah buku / mentransfer " +
+" uang dengan CEK BANK " + $F{suratTransferHd.bank.nama}.toUpperCase() + " No. " +
+$F{suratTransferHd.noCek} + " Tanggal " + $F{suratTransferHd.tglSurat}.toString() +
+" sejumlah " + $V{totalBelanja}  + " dengan tujuan sesuai daftar di bawah ini "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="header" x="324" y="72" width="221" height="20" uuid="c88a9da0-c878-4a8a-9716-41b7fdf7b115"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Palembang, " +  new SimpleDateFormat("dd MMM yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="header" x="324" y="92" width="65" height="20" uuid="9acb85fe-ef08-4306-9f03-914e900c3f12"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[No Ref]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="389" y="92" width="22" height="20" uuid="4f88e684-3da9-44b8-907a-aa08f15456ba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="header" x="411" y="92" width="134" height="20" uuid="7ad84b76-2aac-4b72-8329-148aa22f94d9"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{suratTransferHd.noApprove}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="36">
+			<rectangle>
+				<reportElement mode="Transparent" x="2" y="4" width="550" height="32" uuid="a05489d1-cdff-4a6d-b13b-ac4da23537dc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="3" width="29" height="29" uuid="35ca2319-35e3-45c1-89cd-add9b5568913"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="4" width="215" height="28" uuid="1fec441e-885f-42db-bbd5-3ecaf19f6573"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Atas Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="3" width="175" height="29" uuid="09cce842-272b-4816-8380-1ffa677407f5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Bank & No Rekening]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="428" y="4" width="123" height="28" uuid="c3eb430d-95e4-4b8a-a212-7052c186f8d1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Jumlah Uang]]></text>
+			</staticText>
+			<line>
+				<reportElement x="36" y="4" width="1" height="32" uuid="ba5a3290-0948-484e-ae0d-9efc27a112ab"/>
+			</line>
+			<line>
+				<reportElement x="252" y="4" width="1" height="32" uuid="fca494bb-83c0-4912-a9f3-17a257b2de25"/>
+			</line>
+			<line>
+				<reportElement x="427" y="4" width="1" height="32" uuid="168c43ef-d530-479d-b9b6-775a45643378"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="61" splitType="Stretch">
+			<line>
+				<reportElement positionType="Float" x="2" y="0" width="1" height="61" uuid="b4fc15b4-f0e8-40a8-8e60-56c85e9c5a2c"/>
+			</line>
+			<staticText>
+				<reportElement style="isi" x="45" y="4" width="70" height="15" uuid="098c401f-4bd7-4e37-9610-56042ce6561c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ATAS NAMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="45" y="19" width="70" height="20" uuid="84065715-0edb-4789-80d2-efe2ec2ab5c2"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[SUPPLIER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="115" y="4" width="22" height="15" uuid="cb3b5c40-7334-47ee-82f2-7e5d718f6fe4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="115" y="19" width="22" height="20" uuid="56bb2872-2197-47bf-8670-ddfb870eaf24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="isi" x="137" y="4" width="115" height="15" uuid="b6ac4af2-9798-4af1-9b84-39d5a55bf59c"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.nama}.toLowerCase()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="36" y="0" width="1" height="61" uuid="35150ab9-8f1b-4a95-9636-790b08bfb961"/>
+			</line>
+			<line>
+				<reportElement x="252" y="0" width="1" height="61" uuid="f430346c-9fbd-484e-b5aa-4f566b86542a"/>
+			</line>
+			<line>
+				<reportElement x="427" y="0" width="1" height="61" uuid="938f8462-79aa-47a4-94f5-70ba40a2d47a"/>
+			</line>
+			<line>
+				<reportElement x="552" y="0" width="1" height="61" uuid="99522bb9-263c-49a2-b8a7-8664d71d465d"/>
+			</line>
+			<staticText>
+				<reportElement style="isi" x="254" y="0" width="42" height="15" uuid="fc9b89f9-dfdb-4cf5-9142-911bc34652cd"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[BANK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="254" y="15" width="42" height="15" uuid="85e152df-02b6-4283-9ac6-51f941d31bd9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[CAB	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="254" y="30" width="42" height="15" uuid="44a3d9ad-4403-4b3e-afda-13d500c69c1b"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[KOTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="254" y="45" width="42" height="15" uuid="ba6feeb1-cd92-4750-a94f-0b53fca7c44a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[NO.REK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="296" y="0" width="22" height="15" uuid="dd237bbe-baa1-47f7-be75-31517c96d4e3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="296" y="15" width="22" height="15" uuid="e10d9eb2-9942-4fe8-8f21-76d941235293"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="296" y="30" width="22" height="15" uuid="9d903eee-5b30-43a5-a98d-28ee6f29ab59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="isi" x="296" y="45" width="22" height="15" uuid="98fa56cc-5ccb-415b-b258-2cde1a093659"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="isi" x="318" y="0" width="109" height="15" uuid="b9d19c0c-8706-49b4-9940-a7805de3d7b1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.namaBank}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="isi" x="318" y="15" width="109" height="15" uuid="c9069a1d-2b79-4cff-99a4-be9552627f41"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.namaCabangBank}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="isi" x="318" y="30" width="109" height="15" uuid="cd569493-d60c-4179-8e90-ccf050e451e1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.kotaBank}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="header" x="427" y="1" width="118" height="29" uuid="799e71d8-ff8b-4dd1-8470-bb7b92820a0d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.kredit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement style="isi" x="6" y="2" width="29" height="20" uuid="598b2138-5883-4771-af66-ed71e7a52134"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{nomor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="isi" x="137" y="19" width="115" height="20" uuid="4b969b8b-7930-4252-8cf1-0fd58c5f71ae"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.kode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="isi" x="319" y="46" width="109" height="14" uuid="b5c11f5d-8e6f-4c4d-a570-ae2caf976639"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{jurnalDetil.customer.noRekening}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26">
+			<textField>
+				<reportElement style="foot" x="37" y="4" width="167" height="17" uuid="b536b14d-13d3-4059-aa81-fea1a9b291ca"/>
+				<textElement verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="foot" x="389" y="5" width="156" height="16" uuid="d25db553-1e0f-4f0b-a060-fd106e145210"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pageOf}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="189">
+			<rectangle>
+				<reportElement mode="Transparent" x="3" y="1" width="550" height="31" uuid="e0a860fa-1c61-4e76-82c6-482eb4a0a4f3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="45" y="9" width="143" height="20" uuid="97b7afba-0da4-495c-aae6-c3a962fe946d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="header" x="254" y="9" width="291" height="20" uuid="92097087-957a-485c-90c5-b105172b6187"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalBelanja}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="56" width="539" height="28" uuid="f5d78724-5390-4b3d-9d45-b1970bfe292e"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["Jumlah Bilyet Cek tersebut beserta biaya Transfer mohon dibebankan " +
+"kepada rekening kami, No Rek xxx yang ada pada " + $F{suratTransferHd.bank.nama} +  " " +
+"cabang " + $F{suratTransferHd.bank.namaCabangBank}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="header" x="6" y="113" width="253" height="12" uuid="6adecf08-6cd6-4fe3-9c85-e068e10389f3"/>
+				<text><![CDATA[Hormat kami,]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="6" y="159" width="252" height="14" uuid="2d668bd4-f812-4418-8ccf-603d29893eaa"/>
+				<textFieldExpression><![CDATA[$P{h1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="header" x="6" y="84" width="539" height="20" uuid="df1cc5e0-83db-477f-b287-aa3979af4cfb"/>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[Atas bantuan dan kerjasamanya Saudara, diucapkan banyak terima kasih]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

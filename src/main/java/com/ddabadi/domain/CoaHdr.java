@@ -1,5 +1,7 @@
 package com.ddabadi.domain;
 
+import com.ddabadi.enumer.GroupAccount;
+
 import javax.persistence.*;
 
 /**
@@ -22,6 +24,17 @@ public class CoaHdr {
 
     @Column(name = "kode_bagian", length = 10)
     private String kodeBagian;
+
+    @Column(name = "group_account")
+    private GroupAccount groupAccount;
+
+    public GroupAccount getGroupAccount() {
+        return groupAccount;
+    }
+
+    public void setGroupAccount(GroupAccount groupAccount) {
+        this.groupAccount = groupAccount;
+    }
 
     public String getKodeBagian() {
         return kodeBagian;

@@ -5,6 +5,8 @@ package com.ddabadi.dto;
  */
 public class JurnalDetilDto {
 
+
+
     // if id = 0 -> add new
     // else
     //    id = jurnalDetil.id
@@ -15,8 +17,7 @@ public class JurnalDetilDto {
     // string 6000
     private String bagian;
     private String keterangan;
-    private Double debet;
-    private Double kredit;
+    private Double total;
 
     //D atau K
     private String dk;
@@ -101,20 +102,12 @@ public class JurnalDetilDto {
         this.keterangan = keterangan;
     }
 
-    public Double getDebet() {
-        return debet;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setDebet(Double debet) {
-        this.debet = debet;
-    }
-
-    public Double getKredit() {
-        return kredit;
-    }
-
-    public void setKredit(Double kredit) {
-        this.kredit = kredit;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
     public String getDk() {

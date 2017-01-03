@@ -24,8 +24,9 @@ public class BagianServiceImpl implements BagianService {
 
     @Override
     public Page<Bagian> getByKodeByNamaPage(String kode, String nama, int hal, int jumlah) {
-        PageRequest pageRequest = new PageRequest(hal-1,jumlah, Sort.Direction.ASC,"nama");
-        return repository.findByNamaKodePage('%'+nama+'%','%'+kode+'%',pageRequest);
+        PageRequest pageRequest = new PageRequest(hal-1,jumlah, Sort.Direction.ASC,"kode");
+        //return repository.findByNamaKodePage('%'+nama+'%','%'+kode+'%',pageRequest);
+        return repository.findByNamaLikeAndKodeLike('%'+nama+'%','%'+kode+'%',pageRequest);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class BagianServiceImpl implements BagianService {
         Bagian bagianEdit = repository.findOne(idEdit);
         bagianEdit.setNama(bagian.getNama());
         bagianEdit.setStatus(bagian.getStatus());
-        bagianEdit.setKode(bagian.getKode());
+        //bagianEdit.setKode(bagian.getKode());
         bagianEdit.setDirektorat(bagian.getDirektorat());
         return repository.saveAndFlush(bagianEdit);
     }
@@ -58,5 +59,22 @@ public class BagianServiceImpl implements BagianService {
             bagian = bagians.iterator().next();
         }
         return bagian;
+    }
+
+    @Override
+    public Boolean isKodeExist(String kode) {
+        Bagian bagian = this.getByKode(kode);
+        if(bagian==null){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+    @Override
+    public List<Bagian> getAll() {
+        Sort sort = new Sort(Sort.Direction.ASC,"kode");
+        return repository.findAll(sort);
     }
 }

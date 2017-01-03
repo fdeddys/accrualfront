@@ -48,11 +48,33 @@ public class Customer {
     @Column(name = "nama_cabang_bank", length = 100)
     private String namaCabangBank;
 
+    @Column(name = "kota_bank", length = 100)
+    private String kotaBank;
+
+    public String getKotaBank() {
+        return kotaBank;
+    }
+
+    public void setKotaBank(String kotaBank) {
+        this.kotaBank = kotaBank;
+    }
+
     @Column(name = "kontak_person", length = 100)
     private String kontakPerson;
 
     @Column(name = "Status")
     private Status  status;
+
+    @Column(name="is_supplier")
+    private Boolean isSupplier;
+
+    public Boolean getIsSupplier() {
+        return isSupplier;
+    }
+
+    public void setIsSupplier(Boolean isSupplier) {
+        this.isSupplier = isSupplier;
+    }
 
     public Long getId() {
         return id;

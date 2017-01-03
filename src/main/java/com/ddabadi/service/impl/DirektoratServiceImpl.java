@@ -43,6 +43,16 @@ public class DirektoratServiceImpl implements DirektoratService {
     }
 
     @Override
+    public Boolean isKodeExist(String kode) {
+        List<Direktorat> direktorats = repository.findByKode(kode.trim());
+        if(direktorats.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
     public Direktorat save(Direktorat direktorat) {
         logger.info("save");
         return repository.saveAndFlush(direktorat);
@@ -53,7 +63,7 @@ public class DirektoratServiceImpl implements DirektoratService {
         logger.info("update id [ "+idEdit.toString()+" ]");
         Direktorat direktoratEdit = repository.findOne(idEdit);
         direktoratEdit.setNama(direktorat.getNama());
-        direktoratEdit.setKode(direktorat.getKode());
+        //direktoratEdit.setKode(direktorat.getKode());
         return repository.saveAndFlush(direktoratEdit);
     }
 

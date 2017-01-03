@@ -13,6 +13,7 @@ public interface DirektoratService {
     public List<Direktorat> getAll(String urut);
     public Direktorat getById(Long id);
     public List<Direktorat> getByNama(String nama);
+    public Boolean isKodeExist(String kode);
     public Direktorat save(Direktorat direktorat);
     public Direktorat update(Long idEdit, Direktorat direktorat);
 

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by deddy on 4/23/16.
  */
@@ -19,5 +21,8 @@ public interface SupplierRepository extends JpaRepository<Supplier,Long> {
 
     @Query(value = "select s from Supplier s ")
     Page<Supplier> findAllPage(Pageable pageable);
+
+    //is Kode Exist
+    //List<Supplier> findByKode(String kode);
 
 }

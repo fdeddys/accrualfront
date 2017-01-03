@@ -96,4 +96,16 @@ public class UserServiceImpl implements UserService {
         userEdit.setStatus(user.getStatus());
         return repository.saveAndFlush(userEdit);
     }
+
+    @Override
+    public Boolean isAdmin(String nama) {
+        Boolean hasil = false;
+        Iterator<User> users = repository.findOneByNama(nama).iterator();
+        if (users.hasNext()){
+            User user = users.next();
+            hasil = user.getIsAdmin();
+        }
+
+        return hasil;
+    }
 }

@@ -26,7 +26,8 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public List<Bank> getAll() {
-        return repository.findAll();
+        Sort sort = new Sort(Sort.Direction.ASC,"kode");
+        return repository.findAll(sort);
     }
 
     private Bank getByKode(String kode){
@@ -82,10 +83,11 @@ public class BankServiceImpl implements BankService {
 
         Bank bankUpdate = repository.findOne(idEdit);
         bankUpdate.setNama(bank.getNama());
-        bankUpdate.setKode(bank.getKode());
+        //bankUpdate.setKode(bank.getKode());
         bankUpdate.setNamaCabangBank(bank.getNamaCabangBank());
         bankUpdate.setNoAccount(bank.getNoAccount());
         bankUpdate.setStatus(bank.getStatus());
+        bankUpdate.setKota(bank.getKota());
         return repository.save(bankUpdate);
     }
 

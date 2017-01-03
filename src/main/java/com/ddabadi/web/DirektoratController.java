@@ -1,15 +1,21 @@
 package com.ddabadi.web;
 
+import com.ddabadi.Report.ReportController;
 import com.ddabadi.domain.Direktorat;
+import com.ddabadi.domain.Parameter;
 import com.ddabadi.domain.User;
 import com.ddabadi.service.DirektoratService;
+import com.ddabadi.service.ParameterService;
 import com.ddabadi.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.Console;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by deddy on 4/30/16.
@@ -22,6 +28,7 @@ public class DirektoratController {
 
     @Autowired private DirektoratService direktoratService;
     @Autowired private UserService userService;
+    @Autowired private ParameterService parameterService;
 
     private Logger logger = Logger.getLogger(DirektoratController.class);
 
@@ -41,6 +48,12 @@ public class DirektoratController {
     public Direktorat getById(@PathVariable("id")Long id){
         logger.info("get by id [ " + id.toString() +" ] ");
         return direktoratService.getById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "isKodeExist/{kode}")
+    public boolean isKodeSudahAda(@PathVariable("kode")String kode){
+        logger.info("is kode exist " + kode.toString());
+        return direktoratService.isKodeExist(kode.trim());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "tesss")
@@ -138,6 +151,22 @@ public class DirektoratController {
         return  direktoratService.update(id,direktorat);
     }
 
+    @RequestMapping(value = "laporan",
+            method = RequestMethod.GET)
+    public void laporanMasterBagian(HttpServletResponse response){
+
+        Parameter parameter = parameterService.get();
+        List<Direktorat> direktorats = direktoratService.getAll("nama");
+        //new ArrayList<Bagian>();
+        Map<String,Object> maps=new HashMap<String, Object>();
+        maps.put("h1",parameter.getH1().trim());
+        maps.put("h2",parameter.getH2().trim());
+        maps.put("h3",parameter.getH3().trim());
+        maps.put("h4",parameter.getH4().trim());
+
+        ReportController report= new ReportController();
+        report.previewReport("/report/master/MstDirektorat.jasper",maps,direktorats,"laporan", response);
+    }
 
 
 }
