@@ -6,7 +6,7 @@ import com.ddabadi.service.BagianService;
 import com.ddabadi.service.BukuBesarService;
 import com.ddabadi.service.BukuBesarTrialService;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;

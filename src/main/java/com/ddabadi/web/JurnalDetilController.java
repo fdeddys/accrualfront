@@ -81,9 +81,18 @@ public class JurnalDetilController {
     Page<JurnalDetil> getVoucherUntukSuratTransfer(@PathVariable("hal")int hal,
                                                    @PathVariable("jumlah")int jumlah) {
 
-        return jurnalDetilService.getVoucherSuratTransfer(hal,jumlah);
+        return jurnalDetilService.getVoucherSuratTransfer(hal, jumlah);
     }
 
+    @RequestMapping(value = "listVoucST/bank/{idBank}/noUrut/{noUrut}/hal/{hal}/jumlah/{jumlah}",
+            method = RequestMethod.GET)
+    Page<JurnalDetil> getVoucherUntukSuratTransferByBank(   @PathVariable("idBank")Long idBank,
+                                                            @PathVariable("noUrut")String noUrut,
+                                                            @PathVariable("hal")int hal,
+                                                            @PathVariable("jumlah")int jumlah) {
+
+        return jurnalDetilService.getVoucherSuratTransferBankNoUrut(idBank,noUrut, hal, jumlah);
+    }
 
 
     @RequestMapping(value = "voucher/{idHd}",

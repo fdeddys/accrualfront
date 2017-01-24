@@ -7,13 +7,14 @@ import com.ddabadi.domain.SuratTransferHd;
 import com.ddabadi.dto.SuratTransferDtDto;
 import com.ddabadi.dto.SuratTransferHdDto;
 import com.ddabadi.exception.InvalidDateException;
+import com.ddabadi.exception.SuratTransferHadDetilException;
 import com.ddabadi.service.ParameterService;
 import com.ddabadi.service.SuratTransferService;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import sun.java2d.pipe.SpanShapeRenderer;
+
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
@@ -111,6 +112,43 @@ public class SuratTransferController {
                                     @PathVariable int jumlah){
         return suratTransferService.getDtByHd(id,hal,jumlah);
     }
+
+    @RequestMapping(value = "hd/{id}",
+            method = RequestMethod.DELETE)
+    Map<String,Object> deleteHdr(@PathVariable Long id) {
+        SuratTransferHd hd = suratTransferService.getHdById(id);
+        List<SuratTransferDt> dts = suratTransferService.getDtByHd(hd.getId());
+        if(dts.size()>0){
+            throw new SuratTransferHadDetilException();
+        }else{
+            Map<String,Object> hasil = new HashMap<String, Object>();
+            Integer hasilDelete = suratTransferService.deleteHd(id);
+            if(hasilDelete==1){
+                hasil.put("rseult","ok");
+            }else{
+                hasil.put("result","not ok");
+            }
+            return hasil;
+        }
+
+    }
+
+
+
+    //APPROVE
+    @RequestMapping(value = "approve/{idHd}/user/{idUser}",
+                    method = RequestMethod.POST)
+    SuratTransferHd approve(@PathVariable("idHd")Long idHd,
+                            @PathVariable("idUser")Long idUser){
+
+        return suratTransferService.ApproveById(idHd, idUser);
+    }
+
+//    @RequestMapping(value = "dt/{id}",
+//                    method = RequestMethod.DELETE)
+//    public void deleteDt(@PathVariable Long id){
+//        suratTransferService.delDtById(id);
+//    }
 
 
     @RequestMapping(value = "new",

@@ -33,8 +33,30 @@ public class AccrualConfig {
     @Column(name = "coa_jurnal_balik", length = 10)
     private String coaJurnalBalik;
 
+    @Column(name = "kode_kas_table_bank", length = 10)
+    private String kodeKasTableBank;
+
     @Column(name="bulanTahunBerjalan", length = 6)
     private String bulanTahunBerjalan;
+
+    @Column(name = "coa_piutang_usaha", length = 10)
+    private String coaPiutangUsaha;
+
+    public String getCoaPiutangUsaha() {
+        return coaPiutangUsaha;
+    }
+
+    public void setCoaPiutangUsaha(String coaPiutangUsaha) {
+        this.coaPiutangUsaha = coaPiutangUsaha;
+    }
+
+    public String getKodeKasTableBank() {
+        return kodeKasTableBank;
+    }
+
+    public void setKodeKasTableBank(String kodeKasTableBank) {
+        this.kodeKasTableBank = kodeKasTableBank;
+    }
 
     public String getBulanTahunBerjalan() {
         return bulanTahunBerjalan;

@@ -44,7 +44,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
     public Page<JurnalHeader> getByIdUserTanggal(Long idUser, Date tgl1, Date tgl2, int hal, int jumlah) {
         logger.info("get by id User");
         PageRequest pageRequest = new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"id");
-        return repository.findByIdfindByIdTanggal(tgl1, tgl2,idUser, pageRequest);
+        return repository.findByIdfindByIdTanggal(tgl1, tgl2, idUser, pageRequest);
     }
 
     @Override
@@ -323,14 +323,34 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
 
         if(jenisVoucher.equals(JenisVoucher.PENGELUARAN)){
             // jika voucher pengeluaran di bedakan pakai IS_VALIDASI_PEMBAYARAN
-            return repository.findByIssueDateBetweenAndStatusVoucherAndJenisVoucherAndIsValidasiPembayaranIsFalse(tgl1, tgl2,statusVoucher,jenisVoucher,pageRequest);
+            return repository.findByIssueDateBetweenAndStatusVoucherAndJenisVoucherAndIsValidasiPembayaranIsFalse(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
         }else{
             // jika NON voucher pengeluaran set POSTING = TRUE
-            return repository.findByIssueDateBetweenAndStatusVoucherAndJenisVoucher(tgl1, tgl2,statusVoucher,jenisVoucher,pageRequest);
+            return repository.findByIssueDateBetweenAndStatusVoucherAndJenisVoucher(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
         }
 
 
     }
+
+    public Page<JurnalHeader> getJurnalBelumPostingByIssueDateBetweenAndStatusVoucherAndJenisVoucher(Date tgl1, Date tgl2, StatusVoucher statusVoucher, JenisVoucher jenisVoucher, int hal, int jumlah) {
+        Sort sort = new Sort(Sort.Direction.ASC,"issueDate").and( new Sort(Sort.Direction.ASC, "id"));
+
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah, sort);
+
+
+        if(jenisVoucher.equals(JenisVoucher.PENGELUARAN)){
+            // jika voucher pengeluaran di bedakan pakai IS_VALIDASI_PEMBAYARAN
+            //return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsValidasiPembayaranIsFalse(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
+
+            return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsTrue(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
+        }else{
+            // jika NON voucher pengeluaran set POSTING = TRUE
+            return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucher(tgl1, tgl2,statusVoucher,jenisVoucher,pageRequest);
+        }
+
+
+    }
+
 
     @Override
     public String validasiPembayaran(Long idHdr) {

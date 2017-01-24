@@ -92,7 +92,11 @@ public class UserServiceImpl implements UserService {
         userEdit.setNama(user.getNama());
         userEdit.setInitial(user.getInitial());
         userEdit.setIsAdmin(user.getIsAdmin());
-        userEdit.setPassword(user.getPassword());
+        if(user.getPassword()==""){
+
+        }else{
+            userEdit.setPassword(user.getPassword());
+        }
         userEdit.setStatus(user.getStatus());
         return repository.saveAndFlush(userEdit);
     }

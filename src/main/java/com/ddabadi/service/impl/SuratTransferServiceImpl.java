@@ -7,6 +7,7 @@ import com.ddabadi.dto.SuratTransferDtDto;
 import com.ddabadi.dto.SuratTransferHdDto;
 import com.ddabadi.exception.InvalidDateException;
 import com.ddabadi.service.*;
+import com.ddabadi.service.util.FungsiUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.xml.parsers.SAXParser;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +34,8 @@ public class SuratTransferServiceImpl implements SuratTransferService {
 //    @Autowired private CustomerService customerService;
     @Autowired private JurnalDetilService jurnalDetilService;
     @Autowired private JurnalHdrService jurnalHdrService;
+    @Autowired private FungsiUtil fungsiUtil;
+    @Autowired private UserService userService;
 
     private Logger logger = Logger.getLogger(SuratTransferService.class);
 
@@ -54,6 +58,7 @@ public class SuratTransferServiceImpl implements SuratTransferService {
 
         suratTransferHd.setUserUpdate(suratTransferHdDto.getUserUpdate());
         suratTransferHd.setNoCek(suratTransferHdDto.getNoCek());
+        suratTransferHd.setNoApprove(suratTransferHdDto.getNoApprove());
         suratTransferHd.setTotal(0D);
         suratTransferHd.setBank(bank);
 //        suratTransferHd.setCustomer(customer);
@@ -86,8 +91,38 @@ public class SuratTransferServiceImpl implements SuratTransferService {
     }
 
     @Override
-    public SuratTransferHd ApproveById(Long id) {
-        return null;
+    public SuratTransferHd ApproveById(Long id, Long idUser) {
+
+        // hitung total
+        // iterate is valid Bayar = true
+        // isApprove header st
+
+        Double total=0D;
+        SuratTransferHd suratTransferHd = suratTransferHdRepository.findOne(id);
+        User user = userService.getById(idUser);
+
+        Iterator<SuratTransferDt> suratTransferDts = suratTransferDtRepository.findBySuratTransferHdOrderById(suratTransferHd).iterator();
+        while (suratTransferDts.hasNext()){
+            SuratTransferDt suratTransferDt = suratTransferDts.next();
+            total = total + suratTransferDt.getJurnalDetil().getKredit();
+            JurnalHeader  jurnalHeader = jurnalHdrService.getById(suratTransferDt.getJurnalDetil().getJurnalHeader().getId());
+            jurnalHeader.setIsValidasiPembayaran(true);
+            jurnalHdrService.save(jurnalHeader);
+        }
+
+        String generateNoApprove = fungsiUtil.createNoApproveST(suratTransferHd.getTglSurat());
+        suratTransferHd.setTotal(total);
+        suratTransferHd.setNoApprove(generateNoApprove);
+        suratTransferHd.setLastUpdate(new Date());
+        suratTransferHd.setIsApprove(true);
+        suratTransferHd.setUserUpdate(user.getNama().trim());
+        return suratTransferHdRepository.save(suratTransferHd);
+    }
+
+    @Override
+    public Integer deleteHd(Long id) {
+        suratTransferHdRepository.delete(id);
+        return 1;
     }
 
     @Override
@@ -128,6 +163,14 @@ public class SuratTransferServiceImpl implements SuratTransferService {
     @Override
     public void delDtById(Long id) {
         logger.info("delete dt by id");
+        SuratTransferDt suratTransferDt = suratTransferDtRepository.findOne(id);
+
+        JurnalDetil jurnalDetil = jurnalDetilService.getById(suratTransferDt.getJurnalDetil().getId());
+        JurnalHeader jurnalHeader = jurnalHdrService.getById(jurnalDetil.getJurnalHeader().getId());
+
+        jurnalHeader.setIsTarikPembayaran(false);
+        jurnalHdrService.save(jurnalHeader);
+
         suratTransferDtRepository.delete(id);
     }
 
@@ -145,5 +188,7 @@ public class SuratTransferServiceImpl implements SuratTransferService {
         SuratTransferHd suratTransferHd=suratTransferHdRepository.findOne(idHd);
         return suratTransferDtRepository.findBySuratTransferHdOrderById(suratTransferHd);
     }
+
+
 
 }

@@ -32,6 +32,7 @@ public interface JurnalDetilService {
 
     //narik daftar jurnal untuk proses surat transfer
     Page<JurnalDetil> getVoucherSuratTransfer( int hal, int jumlah);
+    Page<JurnalDetil> getVoucherSuratTransferBankNoUrut(Long idBank,String noUrut, int hal, int jumlah);
 
     Double getTotalDebet(Long idHdr);
     Double getTotalKredit(Long idHdr);

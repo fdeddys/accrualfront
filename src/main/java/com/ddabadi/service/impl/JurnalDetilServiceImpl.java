@@ -34,6 +34,8 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
     @Autowired private CustomerService customerService;
     @Autowired private BankService bankService;
     @Autowired private FungsiUtil fungsiUtil;
+    @Autowired private AccrualConfigService accrualConfigService;
+
 
     @Override
     public JurnalDetil getById(Long id) {
@@ -72,23 +74,40 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
     public JurnalDetil save(JurnalDetilDto jurnalDetilDto) {
         logger.info("save");
 
+        String noGeneratedPiutUsaha;
+
+        AccrualConfig accrualConfig= accrualConfigService.getConfig();
+
         String relNo;
         // if id = 0 -> add new
         // else
         //    id = jurnalDetil.id
         JurnalDetil jurnalDetil = null;
-        if(jurnalDetilDto.getId()==0L){
+
+        if(jurnalDetilDto.getId()==null){
             //new record
             jurnalDetil = new JurnalDetil();
         }else{
-            //update record
-            jurnalDetil = jurnalDetilRepository.findOne(jurnalDetilDto.getId());
+            if(jurnalDetilDto.getId()==0L){
+                //new record
+                jurnalDetil = new JurnalDetil();
+            }else{
+                //update record
+                jurnalDetil = jurnalDetilRepository.findOne(jurnalDetilDto.getId());
+            }
+
         }
         JurnalHeader jurnalHeader = jurnalHdrService.getById(jurnalDetilDto.getJurnalHeaderId());
         jurnalDetil.setJurnalHeader(jurnalHeader);
 
         CoaDtl coaDtl = coaDtlService.getById(jurnalDetilDto.getAccountDetilId());
         jurnalDetil.setAccountDetil(coaDtl);
+        if(accrualConfig.getCoaPiutangUsaha().trim().equals(coaDtl.getKodePerkiraan().toString()) ){
+            noGeneratedPiutUsaha = fungsiUtil.createNoPiutangUsaha(jurnalHeader.getIssueDate());
+            jurnalDetil.setRel(noGeneratedPiutUsaha);
+        }else{
+            jurnalDetil.setRel(jurnalDetilDto.getRel());
+        }
 
         Bagian bagian = bagianService.getByKode(jurnalDetilDto.getBagian());
         jurnalDetil.setBagian(bagian);
@@ -105,25 +124,23 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
             //jurnalDetil.setDk(DebetKredit.K);
         }
 
-        if(coaDtl.getAutoGenerateNo()==null){
-            relNo=jurnalDetilDto.getRel();
-        }else{
-            if (coaDtl.getAutoGenerateNo().equals(true)) {
-                if(jurnalDetilDto.getRel()=="" ||jurnalDetilDto.getRel()== null){
-                    //FungsiUtil fungsiUtil = new FungsiUtil();
-                    relNo = fungsiUtil.createNoRel(coaDtl,jurnalHeader.getIssueDate());
-                }else{
-                    relNo=jurnalDetilDto.getRel();
-                }
-            }else{
-                relNo=jurnalDetilDto.getRel();
-            }
-
-        }
-
-
-
-        jurnalDetil.setRel(relNo);
+//        if(coaDtl.getAutoGenerateNo()==null){
+//            relNo=jurnalDetilDto.getRel();
+//        }else{
+//            if (coaDtl.getAutoGenerateNo().equals(true)) {
+//                if(jurnalDetilDto.getRel()=="" ||jurnalDetilDto.getRel()== null){
+//                    //FungsiUtil fungsiUtil = new FungsiUtil();
+//                    relNo = fungsiUtil.createNoRel(coaDtl,jurnalHeader.getIssueDate());
+//                }else{
+//                    relNo=jurnalDetilDto.getRel();
+//                }
+//            }else{
+//                relNo=jurnalDetilDto.getRel();
+//            }
+//
+//        }
+//
+//        jurnalDetil.setRel(relNo);
 
         if(jurnalDetilDto.getCustomerId()==0){
             jurnalDetil.setCustomer(null);
@@ -180,6 +197,22 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
         PageRequest pageRequest = new PageRequest(hal-1, jumlah);
 
         return jurnalDetilRepository.findByJurnalHeaderJenisVoucherAndJurnalHeaderIsValidasiPembayaranIsTrueAndJurnalHeaderStatusVoucherAndJurnalHeaderIsTarikPembayaranFalseAndDebetOrderByJurnalHeaderIssueDate(JenisVoucher.PENGELUARAN,StatusVoucher.UNPOSTING,0D, pageRequest) ;
+    }
+
+    @Override
+    public Page<JurnalDetil> getVoucherSuratTransferBankNoUrut(Long idBank, String noUrut,int hal, int jumlah) {
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah);
+
+        String kriteriaNoUrut ;
+
+        if(noUrut.equals("--")){
+            kriteriaNoUrut="%";
+        }else{
+            kriteriaNoUrut=noUrut.trim()+"%";
+        }
+        Bank bank = bankService.getById(idBank);
+
+            return jurnalDetilRepository.findByJurnalHeaderJenisVoucherAndJurnalHeaderStatusVoucherAndDebetAndBankAndJurnalHeaderNoUrutLikeAndJurnalHeaderIsTarikPembayaranIsFalseOrderByJurnalHeaderIssueDate(JenisVoucher.PENGELUARAN, StatusVoucher.UNPOSTING, 0D, bank,kriteriaNoUrut, pageRequest);
     }
 
     @Override

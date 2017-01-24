@@ -34,6 +34,8 @@ public class AccrualConfigServiceImpl implements AccrualConfigService {
             accrualConfig.setHeaderPemindahan("");
             accrualConfig.setHeaderPenerimaan("");
             accrualConfig.setBulanTahunBerjalan("");
+            accrualConfig.setKodeKasTableBank("");
+            accrualConfig.setCoaPiutangUsaha("");
             accrualConfig=repository.saveAndFlush(accrualConfig);
         }
 
@@ -58,6 +60,8 @@ public class AccrualConfigServiceImpl implements AccrualConfigService {
         accrualConfig.setHeaderPemindahan(accrualConfigUpdate.getHeaderPemindahan());
         accrualConfig.setHeaderPenerimaan(accrualConfigUpdate.getHeaderPenerimaan());
         accrualConfig.setBulanTahunBerjalan(accrualConfigUpdate.getBulanTahunBerjalan());
+        accrualConfig.setKodeKasTableBank(accrualConfigUpdate.getKodeKasTableBank());
+        accrualConfig.setCoaPiutangUsaha(accrualConfigUpdate.getCoaPiutangUsaha());
         //if(databaru==true){
         accrualConfig=repository.saveAndFlush(accrualConfig);
         //}

@@ -60,5 +60,12 @@ public class RestExceptionProcessor {
         return new ErrorInfo(errUrl,"Tangal tidak valid");
     }
 
+    @ExceptionHandler(SuratTransferHadDetilException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorInfo suratTrfError(HttpServletRequest request, SuratTransferHadDetilException ex){
+        String errUrl = request.getRequestURL().toString();
+        return new ErrorInfo(errUrl,"Surat Transfer ada detil !! ");
+    }
 
 }

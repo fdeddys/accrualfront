@@ -45,7 +45,7 @@ public class CoaDtlController {
         if(kode.trim().equals("--")){
             return getAllPage(hal,jumlah);
         }else{
-            return coaDtlService.getByKodeByNamaPage("%"+kode+"%","%",hal,jumlah);
+            return coaDtlService.getByKodeByNamaPage(kode+"%","%",hal,jumlah);
         }
     }
 
@@ -74,7 +74,7 @@ public class CoaDtlController {
             kriteriaNama="%";
         }
 
-        return coaDtlService.getByKodeByNamaPage("%"+kriteriaKode+"%","%"+kriteriaNama+"%",hal,jumlah);
+        return coaDtlService.getByKodeByNamaPage(kriteriaKode+"%","%"+kriteriaNama+"%",hal,jumlah);
     }
 
     @RequestMapping(value = "/cashbank/kode/{kode}/nama/{nama}/hal/{hal}/jumlah/{jumlah}")

@@ -180,6 +180,43 @@ public class JurnalHdrController {
         }
     }
 
+    @RequestMapping(value = "listVoucherBelumPosting/issueDate/{tgl1}/{tgl2}/jenisVouc/{jenisVouc}/page/{hal}/{jumlah}",
+            method = RequestMethod.GET)
+    Page<JurnalHeader> getJurnalBelumPostingByJenis(@PathVariable("tgl1")String tgl1,
+                                        @PathVariable("tgl2")String tgl2,
+                                        @PathVariable("jenisVouc")int jenisVouch,
+                                        @PathVariable("hal")int hal,
+                                        @PathVariable("jumlah")int jumlah){
+        // 0=PENERIMAA
+        // 1=PENGELUARAN,
+        // 2=PEMINDAHAN
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date tglAwal = sdf1.parse(tgl1);
+            Date tglAkhir = sdf1.parse(tgl2);
+            JenisVoucher jenisVoucher =null ;
+            switch (jenisVouch){
+                case 0 : jenisVoucher= JenisVoucher.PENERIMAAN;
+                    break;
+                case 1: jenisVoucher = JenisVoucher.PENGELUARAN;
+                    break;
+                case 2: jenisVoucher=JenisVoucher.PEMINDAHAN;
+                    break;
+            }
+            StatusVoucher statusVoucher = StatusVoucher.UNPOSTING;
+            if(jenisVouch==1){
+                return jurnalHdrService.getJurnalBelumPostingByIssueDateBetweenAndStatusVoucherAndJenisVoucher(tglAwal, tglAkhir, statusVoucher, jenisVoucher, hal, jumlah);
+            }else{
+                return jurnalHdrService.getJurnalBelumPostingByIssueDateBetweenAndStatusVoucherAndJenisVoucher(tglAwal, tglAkhir, statusVoucher, jenisVoucher, hal, jumlah);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     @RequestMapping(value = "/isiBookingDate/jurnalPengeluaranIsTarik/{tgl1}/{tgl2}/{hal}/{jumlah}",
                     method = RequestMethod.GET)
     Page<JurnalHeader> getJurnalPengeluaranIsTarikTglPage(@PathVariable String tgl1,

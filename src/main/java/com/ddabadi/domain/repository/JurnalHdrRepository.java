@@ -56,4 +56,26 @@ public interface JurnalHdrRepository extends JpaRepository<JurnalHeader,Long> {
                                                                                                         StatusVoucher statusVoucher,
                                                                                                         JenisVoucher jenisVoucher,
                                                                                                         Pageable pageable);
+
+    //list jurnal belum posting VOUCHER PEMBAYARAN
+    Page<JurnalHeader> findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsValidasiPembayaranIsFalse(Date tgl1,
+                                                                                                           Date tgl2,
+                                                                                                           StatusVoucher statusVoucher,
+                                                                                                           JenisVoucher jenisVoucher,
+                                                                                                           Pageable pageable);
+
+    //list jurnal belum posting VOUCHER PEMBAYARAN REVISI tarik pembayaran
+    Page<JurnalHeader> findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsTrue(Date tgl1,
+                                                                                                                             Date tgl2,
+                                                                                                                             StatusVoucher statusVoucher,
+                                                                                                                             JenisVoucher jenisVoucher,
+                                                                                                                             Pageable pageable);
+
+    // List Jurnal untuk posting per voucher yang sudah un posting
+    Page<JurnalHeader> findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucher(Date tgl1,
+                                                                             Date tgl2,
+                                                                             StatusVoucher statusVoucher,
+                                                                             JenisVoucher jenisVoucher,
+                                                                             Pageable pageable);
+
 }

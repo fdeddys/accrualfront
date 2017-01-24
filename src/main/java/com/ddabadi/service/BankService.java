@@ -11,6 +11,7 @@ import java.util.List;
 public interface BankService {
 
     public List<Bank> getAll();
+    public Page<Bank> getAllNonKas(int hal, int jumlah);
     public boolean isKodeExist(String kode);
     public Bank getById(Long id);
     public Page<Bank> getByNamaPage(String nama, int hal, int jumlah);

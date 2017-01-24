@@ -24,4 +24,8 @@ public interface BankRepository extends JpaRepository<Bank, Long> {
     @Query("Select b from Bank b where b.kode like :cariKode and b.nama like :cariNama ")
     Page<Bank> findByKodeNama(@Param("cariKode")String cariKode, @Param("cariNama")String cariNama, Pageable pageable);
 
+    //untuk surat transfer tidak ada account kas
+    @Query("select b from Bank b where b.kode <> :cari")
+    Page<Bank> findAllNotKas(@Param("cari")String cari, Pageable pageable);
+
 }

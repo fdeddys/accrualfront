@@ -19,7 +19,8 @@ public interface SuratTransferService {
 
     SuratTransferHd editHd(Long idEdit, SuratTransferHd suratTransferHd);
     SuratTransferHd getHdById(Long id);
-    SuratTransferHd ApproveById(Long id);
+    SuratTransferHd ApproveById(Long id, Long idUser);
+    Integer deleteHd(Long id);
     Page<SuratTransferHd> getHdByTanggalSuratNoApprove(Date tgl1, Date tgl2,String noApprove, int hal, int jumlah);
 
     //DT
@@ -28,4 +29,5 @@ public interface SuratTransferService {
     public void delDtById(Long id);
     Page<SuratTransferDt> getDtByHd(Long idHd, int hal, int jumlah);
     List<SuratTransferDt> getDtByHd(Long idHd);
+
 }

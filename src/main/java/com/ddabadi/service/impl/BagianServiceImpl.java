@@ -26,7 +26,7 @@ public class BagianServiceImpl implements BagianService {
     public Page<Bagian> getByKodeByNamaPage(String kode, String nama, int hal, int jumlah) {
         PageRequest pageRequest = new PageRequest(hal-1,jumlah, Sort.Direction.ASC,"kode");
         //return repository.findByNamaKodePage('%'+nama+'%','%'+kode+'%',pageRequest);
-        return repository.findByNamaLikeAndKodeLike('%'+nama+'%','%'+kode+'%',pageRequest);
+        return repository.findByNamaLikeAndKodeLike('%'+nama+'%',kode+'%',pageRequest);
     }
 
     @Override

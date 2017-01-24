@@ -47,6 +47,15 @@ public interface JurnalDetilRepository extends JpaRepository<JurnalDetil,Long> {
             Double kredit,
             Pageable pageable);
 
+    // untuk tarik list jurnal ->proses surat transfer ---Bank, NO Urut
+    Page<JurnalDetil> findByJurnalHeaderJenisVoucherAndJurnalHeaderStatusVoucherAndDebetAndBankAndJurnalHeaderNoUrutLikeAndJurnalHeaderIsTarikPembayaranIsFalseOrderByJurnalHeaderIssueDate(
+            JenisVoucher jenisVoucher,
+            StatusVoucher statusVoucher,
+            Double kredit,
+            Bank bank,
+            String noUrut,
+            Pageable pageable);
+
     @Query(value = "select sum(d.debet) from JurnalDetil d where d.jurnalHeader.id = :idHd ")
     Double findTotalDebet(@Param("idHd")Long idHd);
 

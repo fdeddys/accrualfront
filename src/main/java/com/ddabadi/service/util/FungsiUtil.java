@@ -28,6 +28,11 @@ public class FungsiUtil {
     private AccrualConfigService accrualConfigService;
     @Autowired
     private IdxNoRelService idxNoRelService;
+    @Autowired
+    private IdxNoApproveSTService idxNoApproveSTService;
+    @Autowired
+    private IdxNoPiutangUsahaService idxNoPiutangUsahaService;
+
 
 
     @Autowired
@@ -161,5 +166,72 @@ public class FungsiUtil {
         return  hasil;
 
     }
+
+
+    //APyymm99999
+    public String createNoApproveST( Date tglSurat){
+
+        Long noUrut;
+        String hasil;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yy");
+        String tahun = sdf.format(tglSurat);
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
+        String bulan = sdf2.format(tglSurat);
+
+        IdxNoApproveSuratTansfer idx= idxNoApproveSTService.getByBulanTahun(bulan, tahun);
+        if(idx==null){
+            idx=new IdxNoApproveSuratTansfer();
+            idx.setBulan(bulan);
+            idx.setTahun(tahun);
+            idx.setUrut(0L);
+            idx = idxNoApproveSTService.save(idx);
+        }
+        noUrut= idx.getUrut()+1;
+        idx.setUrut(noUrut);
+
+
+        hasil = ("00000" + noUrut.toString().trim()).trim();
+        hasil = hasil.substring(hasil.length()-5);
+        hasil = "AP"+tahun+bulan+hasil;
+
+        idxNoApproveSTService.save(idx);
+
+        return  hasil;
+    }
+
+    //PUyymm99999
+    public String createNoPiutangUsaha(Date tanggal){
+
+        Long noUrut;
+        String hasil;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yy");
+        String tahun = sdf.format(tanggal);
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
+        String bulan = sdf2.format(tanggal);
+
+        IdxNoPiutangUsaha idx= idxNoPiutangUsahaService.getByBulanTahun(bulan, tahun);
+        if(idx==null){
+            idx=new IdxNoPiutangUsaha();
+            idx.setBulan(bulan);
+            idx.setTahun(tahun);
+            idx.setUrut(0L);
+            idx = idxNoPiutangUsahaService.save(idx);
+        }
+        noUrut= idx.getUrut()+1;
+        idx.setUrut(noUrut);
+
+
+        hasil = ("00000" + noUrut.toString().trim()).trim();
+        hasil = hasil.substring(hasil.length()-5);
+        hasil = "PU"+tahun+bulan+hasil;
+        idxNoPiutangUsahaService.save(idx);
+
+        return  hasil;
+    }
+
 
 }

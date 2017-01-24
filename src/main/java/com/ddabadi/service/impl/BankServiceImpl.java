@@ -1,12 +1,15 @@
 package com.ddabadi.service.impl;
 
+import com.ddabadi.domain.AccrualConfig;
 import com.ddabadi.domain.Bank;
 import com.ddabadi.domain.repository.BankRepository;
+import com.ddabadi.service.AccrualConfigService;
 import com.ddabadi.service.BankService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +26,20 @@ public class BankServiceImpl implements BankService {
     private Logger logger = Logger.getLogger(BankService.class);
 
     @Autowired private BankRepository repository;
+    @Autowired private AccrualConfigService accrualConfigService;
 
     @Override
     public List<Bank> getAll() {
         Sort sort = new Sort(Sort.Direction.ASC,"kode");
         return repository.findAll(sort);
+    }
+
+    @Override
+    public Page<Bank> getAllNonKas(int hal, int jumlah) {
+        String kode = accrualConfigService.getConfig().getKodeKasTableBank();
+        Sort sort = new Sort(Sort.Direction.ASC,"kode");
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah,sort);
+        return repository.findAllNotKas(kode, pageRequest);
     }
 
     private Bank getByKode(String kode){

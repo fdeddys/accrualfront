@@ -40,6 +40,10 @@ public interface JurnalHdrService {
     //untuk p0sting
     Page<JurnalHeader> getByIssueDateBetweenAndStatusVoucherAndJenisVoucher(Date tgl1, Date tgl2, StatusVoucher statusVoucher, JenisVoucher jenisVoucher, int hal, int jumlah);
 
+    //utk posting jurnal penerimaan pemindahan -UPDATE
+    Page<JurnalHeader> getJurnalBelumPostingByIssueDateBetweenAndStatusVoucherAndJenisVoucher(Date tgl1, Date tgl2, StatusVoucher statusVoucher, JenisVoucher jenisVoucher, int hal, int jumlah);
+
+
     //validasi voucher pengeluaran untuk ke surat transfer
     public String validasiPembayaran(Long idHdr);
 
