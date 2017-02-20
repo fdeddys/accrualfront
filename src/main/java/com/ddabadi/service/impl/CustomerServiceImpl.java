@@ -2,6 +2,7 @@ package com.ddabadi.service.impl;
 
 import com.ddabadi.domain.Customer;
 import com.ddabadi.domain.repository.CustomerRepository;
+import com.ddabadi.enumer.Status;
 import com.ddabadi.service.CustomerService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,13 @@ public class CustomerServiceImpl implements CustomerService {
         customerEdit.setKotaBank(customer.getKotaBank());
 
         return repository.saveAndFlush(customerEdit);
+    }
+
+    @Override
+    public Page<Customer> getByNamaActivePage(String nama, int hal, int jumlah) {
+        logger.info("get active by kode " );
+        PageRequest pageRequest= new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"nama");
+        return repository.findByNamaLikeAndStatus(nama + "%", Status.ACTIVE, pageRequest);
     }
 
 

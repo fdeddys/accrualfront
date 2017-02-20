@@ -39,6 +39,15 @@ public class BankController {
         return bankService.getByNamaPage("%", hal,jumlah);
     }
 
+    @RequestMapping(value = "active/hal/{hal}/jumlah/{jumlah}",
+                    method = RequestMethod.GET)
+    public Page<Bank> getAllActive(@PathVariable("hal")int hal,
+                                   @PathVariable("jumlah")int jumlah){
+
+        logger.info("get all active");
+        return bankService.getAllActive(hal,jumlah);
+    }
+
     // untuk surat transfer NON CASH
     @RequestMapping(value = "nonKas/hal/{hal}/jumlah/{jumlah}",
             method = RequestMethod.GET)

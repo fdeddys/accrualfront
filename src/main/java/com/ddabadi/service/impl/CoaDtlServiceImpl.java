@@ -3,6 +3,7 @@ package com.ddabadi.service.impl;
 import com.ddabadi.domain.CoaDtl;
 import com.ddabadi.domain.repository.CoaDtlRepository;
 import com.ddabadi.enumer.GroupAccount;
+import com.ddabadi.enumer.Status;
 import com.ddabadi.service.CoaDtlService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,13 @@ public class CoaDtlServiceImpl implements CoaDtlService {
         logger.info("get by kode by nama CASH BANK page");
         PageRequest pageRequest=new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"kodePerkiraan");
         return repository.findByNamaPerkiraanLikeAndKodePerkiraanLikeAndCashBankIsTrue(nama, kode, pageRequest);
+    }
+
+    @Override
+    public Page<CoaDtl> getByKodeAktif(String kode, int hal, int jumlah) {
+        logger.info("get by kode ACTIVE page");
+        PageRequest pageRequest=new PageRequest(hal-1, jumlah, Sort.Direction.ASC,"kodePerkiraan");
+        return repository.findByKodePerkiraanLikeAndStatus(kode, Status.ACTIVE, pageRequest);
     }
 
     @Override
@@ -88,7 +96,7 @@ public class CoaDtlServiceImpl implements CoaDtlService {
 
     @Override
     public List<CoaDtl> getAllCoa() {
-        Sort sort=new Sort(Sort.Direction.ASC, "kodePerkiraan");
+        Sort sort=new Sort(Sort.Direction.ASC, "accountHeader.kodeAccount").and(new Sort(Sort.Direction.ASC,"kodePerkiraan"));
         return repository.findAll(sort);
     }
 

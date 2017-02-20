@@ -18,5 +18,6 @@ public interface BankService {
     public Page<Bank> getByKodeNamaPage(String kode, String nama, int hal, int jumlah);
     public Bank save(Bank bank);
     public Bank update(Long idEdit, Bank bank);
+    public Page<Bank> getAllActive(int hal, int jumlah);
 
 }

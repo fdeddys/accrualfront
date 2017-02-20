@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Service
 //@Configuration
-public class FungsiUtil {
+public class    FungsiUtil {
 
     @Autowired
     private IdxNoUrutService idxNoUrutService;
@@ -157,8 +157,8 @@ public class FungsiUtil {
         noUrut= idxNoRel.getUrut()+1;
         idxNoRel.setUrut(noUrut);
 
-        hasil = ("0000" + noUrut.toString().trim()).trim();
-        hasil = hasil.substring(hasil.length() - 4);
+        hasil = ("00000" + noUrut.toString().trim()).trim();
+        hasil = hasil.substring(hasil.length() - 5);
         hasil =  coaDtl.getHeaderAutoGenerateNo().toUpperCase().trim() + thn.trim() + bulan.trim() + hasil;
 
         idxNoRelService.save(idxNoRel);

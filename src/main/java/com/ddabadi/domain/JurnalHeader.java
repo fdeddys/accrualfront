@@ -57,6 +57,17 @@ public class JurnalHeader {
     @Column(name = "is_validasi_pembayaran", columnDefinition = "boolean default false")
     private boolean isValidasiPembayaran = false;
 
+    @Column(name = "is_isi_book_date", columnDefinition = "boolean default false")
+    private boolean isIsiBookDate= false;
+
+    public boolean isIsiBookDate() {
+        return isIsiBookDate;
+    }
+
+    public void setIsIsiBookDate(boolean isIsiBookDate) {
+        this.isIsiBookDate = isIsiBookDate;
+    }
+
     public boolean isValidasiPembayaran() {
         return isValidasiPembayaran;
     }

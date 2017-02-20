@@ -5,6 +5,7 @@ import com.ddabadi.domain.JurnalDetil;
 import com.ddabadi.domain.Parameter;
 import com.ddabadi.dto.JurnalDetilDto;
 import com.ddabadi.exception.BankNotFoundException;
+import com.ddabadi.exception.InvalidDateException;
 import com.ddabadi.service.JurnalDetilService;
 import com.ddabadi.service.ParameterService;
 import org.apache.log4j.Logger;
@@ -13,6 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +95,7 @@ public class JurnalDetilController {
                                                             @PathVariable("hal")int hal,
                                                             @PathVariable("jumlah")int jumlah) {
 
-        return jurnalDetilService.getVoucherSuratTransferBankNoUrut(idBank,noUrut, hal, jumlah);
+        return jurnalDetilService.getVoucherSuratTransferBankNoUrut(idBank, noUrut, hal, jumlah);
     }
 
 
@@ -113,5 +117,27 @@ public class JurnalDetilController {
         report.previewReport("/report/transaksi/jurnal.jasper", maps, jurnalDetils, "laporan", response);
     }
 
+
+    @RequestMapping(value = "listJurnalForInputBook/tglAwal/{tglAwal}/tglAkhir/{tglAkhir}/hal/{hal}/jumlah/{jumlah}",
+            method = RequestMethod.GET   )
+    public Page<JurnalDetil> listJurnalForInputBook(@PathVariable("tglAwal")String tglAwal,
+                                                     @PathVariable("tglAkhir")String tglAkhir,
+                                                     @PathVariable("hal")int hal,
+                                                     @PathVariable("jumlah")int jumlah){
+
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date tgl1 = sdf1.parse(tglAwal);
+            Date tgl2 = sdf2.parse(tglAkhir);
+            return jurnalDetilService.getAllJurnalForInputBooking(tgl1, tgl2, hal, jumlah);
+        } catch (ParseException e) {
+            throw new InvalidDateException();
+        }
+
+
+    }
 
 }

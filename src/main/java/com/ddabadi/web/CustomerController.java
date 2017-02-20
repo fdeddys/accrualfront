@@ -1,13 +1,19 @@
 package com.ddabadi.web;
 
+import com.ddabadi.Report.ReportController;
 import com.ddabadi.domain.Customer;
+import com.ddabadi.domain.Parameter;
 import com.ddabadi.service.CustomerService;
+import com.ddabadi.service.ParameterService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by deddy on 4/30/16.
@@ -20,6 +26,7 @@ public class CustomerController {
     private Logger logger = Logger.getLogger(CustomerController.class);
 
     @Autowired private CustomerService customerService;
+    @Autowired private ParameterService parameterService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Customer> getAll(){
@@ -68,6 +75,16 @@ public class CustomerController {
         return  customerService.getByKodeByNamaPage("%", nama, hal, jumlah);
     }
 
+    // page customer by kode
+    @RequestMapping(value = "active/nama/{nama}/hal/{hal}/jumlah/{jumlah}" ,
+            method = RequestMethod.GET)
+    public Page<Customer> getByKodePage(@PathVariable("nama")String nama,
+                                        @PathVariable("hal")int hal,
+                                        @PathVariable("jumlah")int jumlah){
+        logger.info("get by nama active");
+        return  customerService.getByNamaActivePage(nama, hal, jumlah);
+    }
+
     @RequestMapping(value = "isKodeExis/{kode}" ,
                     method = RequestMethod.GET)
     public Boolean isKodeExist(@PathVariable("kode")String kode){
@@ -84,10 +101,25 @@ public class CustomerController {
     @RequestMapping(method = RequestMethod.PUT, value = "{id}")
     public Customer edit(@PathVariable("id")Long id, @RequestBody Customer customer){
         logger.info("simpan");
-        return  customerService.update(id,customer);
+        return  customerService.update(id, customer);
     }
 
+    @RequestMapping(value = "laporan",
+            method = RequestMethod.GET)
+    public void laporanMasterCustomer(HttpServletResponse response){
 
+        Parameter parameter = parameterService.get();
+        List<Customer> customers = customerService.getAll();
+
+        Map<String,Object> maps=new HashMap<String, Object>();
+        maps.put("h1",parameter.getH1().trim());
+        maps.put("h2",parameter.getH2().trim());
+        maps.put("h3",parameter.getH3().trim());
+        maps.put("h4",parameter.getH4().trim());
+
+        ReportController report= new ReportController();
+        report.previewReport("/report/master/MstCustomer.jasper", maps, customers, "laporan", response);
+    }
 
 
 }

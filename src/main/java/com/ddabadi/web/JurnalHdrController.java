@@ -1,13 +1,14 @@
 package com.ddabadi.web;
 
+import com.ddabadi.domain.AccrualConfig;
 import com.ddabadi.domain.JurnalHeader;
 import com.ddabadi.domain.User;
 import com.ddabadi.dto.JurnalBooking;
 import com.ddabadi.dto.JurnalHdrDto;
 import com.ddabadi.enumer.JenisVoucher;
 import com.ddabadi.enumer.StatusVoucher;
-import com.ddabadi.service.JurnalHdrService;
-import com.ddabadi.service.UserService;
+import com.ddabadi.exception.InvalidDateException;
+import com.ddabadi.service.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,9 @@ public class JurnalHdrController {
 
     @Autowired private JurnalHdrService jurnalHdrService;
     @Autowired private UserService userService;
+    @Autowired private AccrualConfigService accrualConfigService;
+    @Autowired private BukuBesarTrialService bukuBesarTrialService;
+
     private Logger logger = Logger.getLogger(JurnalHdrController.class);
 
     @RequestMapping(value = "new",
@@ -102,33 +106,65 @@ public class JurnalHdrController {
 
     @RequestMapping(value = "isiBookingDate/id/{idHdr}",
                     method = RequestMethod.POST)
-    JurnalHeader isiBooking(@RequestBody JurnalBooking jurnalBooking,
+    Map<String,Object> isiBooking(@RequestBody JurnalBooking jurnalBooking,
                             @PathVariable("idHdr")Long idHdr){
+
+        Map<String,Object> hasil = new HashMap<String, Object>();
+
+        AccrualConfig accrualConfig = accrualConfigService.getConfig();
+        String tglProsesBerjalan = accrualConfig.getBulanTahunBerjalan();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            String sTglProses=tglProsesBerjalan.substring(2,6)+"-"+tglProsesBerjalan.substring(0,2)+"-01";
+            String sTglBook =jurnalBooking.getTglBook();
+            Date tglProses = sdf1.parse(sTglProses);
+            Date tglBook = sdf1.parse(sTglBook);
+            int dateDiff = Long.compare(tglProses.getTime() , tglBook.getTime()) ;
+            if(dateDiff>0){
+                // tanggal tidak boleh lebih kecil dari PROSES BERJALAN
+                //throw new InvalidDateException();
+                hasil.put("hasil","Tanggal Book ["+ sTglBook +"] tidak boleh lebih kecil dari proses berjalan ["+sTglProses+"] ");
+                return hasil;
+            }
+
+        } catch (ParseException e) {
+//            throw new InvalidDateException();
+            hasil.put("hasil","Error parsing tanggal book / tanggal berjalan ! ");
+            return hasil;
+        }
 
         logger.info("isi booking date"+ idHdr.toString());
         JurnalHeader jurnalHeader = jurnalHdrService.getById(idHdr);
 
         if(jurnalBooking==null){
-            logger.info("Jurnal booking tidak ketemu " );
-            return null;
+//            logger.info("Jurnal booking tidak ketemu " );
+            //return null;
+            hasil.put("hasil","Jurnal booking tidak ketemu ! ");
         }else{
             if(jurnalHeader.getJenisVoucher().equals(JenisVoucher.PENGELUARAN)){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date tglBook = null;
                 try {
                     tglBook = sdf.parse(jurnalBooking.getTglBook());
-                    return jurnalHdrService.approve(idHdr,jurnalBooking.getUserId(),tglBook);
+                    jurnalHdrService.approve(idHdr,jurnalBooking.getUserId(),tglBook);
+                    bukuBesarTrialService.postingJurnalTrial(idHdr);
+                    hasil.put("hasil", "OK");
+
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    logger.info("Gagal parse tanggal book "+jurnalBooking.getTglBook());
-                    return null;
+                    //logger.info("Gagal parse tanggal book "+jurnalBooking.getTglBook());
+                    hasil.put("hasil", "Error parsing tanggal book / tanggal berjalan !");
+
                 }
             }else{
-                logger.info("Bukan jurnal pengeluaran");
-                return null;
+//                logger.info("Bukan jurnal pengeluaran");
+//                return null;
+                hasil.put("hasil", "Bukan jurnal pengeluaran");
             }
         }
-    };
+
+        return  hasil;
+    }
 
     @RequestMapping(value = "jurnalPengeluaran/hal/{hal}/jumlah/{jumlah}/tgl1/{tgl1}/tgl2/{tgl2}",
                     method = RequestMethod.GET)

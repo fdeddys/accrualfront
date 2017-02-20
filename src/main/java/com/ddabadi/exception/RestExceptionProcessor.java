@@ -68,4 +68,5 @@ public class RestExceptionProcessor {
         return new ErrorInfo(errUrl,"Surat Transfer ada detil !! ");
     }
 
+
 }

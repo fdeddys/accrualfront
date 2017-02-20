@@ -18,4 +18,7 @@ public interface CustomerService {
     public Boolean isKodeExist(String kode);
     public Customer save(Customer customer);
     public Customer update(Long idEdit, Customer customer);
+
+    public Page<Customer> getByNamaActivePage(String nama, int hal, int jumlah);
+
 }

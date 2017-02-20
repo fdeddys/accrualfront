@@ -12,6 +12,9 @@ public interface CoaDtlService {
 
     Page<CoaDtl> getByKodeByNamaPage(String kode, String nama, int hal, int jumlah);
     Page<CoaDtl> getByKodeByNamaCashBankPage(String kode, String nama, int hal, int jumlah);
+    Page<CoaDtl> getByKodeAktif(String kode, int hal, int jumlah);
+
+
     CoaDtl getById(Long id);
     boolean isKodeExis(String kode);
     CoaDtl save(CoaDtl coaDtl);

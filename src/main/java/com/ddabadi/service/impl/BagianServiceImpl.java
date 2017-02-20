@@ -2,6 +2,7 @@ package com.ddabadi.service.impl;
 
 import com.ddabadi.domain.Bagian;
 import com.ddabadi.domain.repository.BagianRepository;
+import com.ddabadi.enumer.Status;
 import com.ddabadi.service.BagianService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,13 @@ public class BagianServiceImpl implements BagianService {
         PageRequest pageRequest = new PageRequest(hal-1,jumlah, Sort.Direction.ASC,"kode");
         //return repository.findByNamaKodePage('%'+nama+'%','%'+kode+'%',pageRequest);
         return repository.findByNamaLikeAndKodeLike('%'+nama+'%',kode+'%',pageRequest);
+    }
+
+    @Override
+    public Page<Bagian> getByKodeByNamaAktifPage(String kode, String nama, int hal, int jumlah) {
+        PageRequest pageRequest = new PageRequest(hal-1,jumlah, Sort.Direction.ASC,"kode");
+        //return repository.findByNamaKodePage('%'+nama+'%','%'+kode+'%',pageRequest);
+        return repository.findByNamaLikeAndKodeLikeAndStatus('%' + nama + '%', kode + '%', Status.ACTIVE, pageRequest);
     }
 
     @Override

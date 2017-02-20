@@ -1,6 +1,7 @@
 package com.ddabadi.domain.repository;
 
 import com.ddabadi.domain.Customer;
+import com.ddabadi.enumer.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query(value = "select c from Customer c where c.nama like :cariNama and c.kode like :cariKode  and c.isSupplier <> true ")
     List<Customer> findByNamaKodeList(@Param("cariNama")String cariNama,
                                       @Param("cariKode")String cariKode);
+
+    Page<Customer> findByNamaLikeAndStatus(String nama, Status status, Pageable pageable);
 
 }

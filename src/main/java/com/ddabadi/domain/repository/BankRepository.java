@@ -1,6 +1,7 @@
 package com.ddabadi.domain.repository;
 
 import com.ddabadi.domain.Bank;
+import com.ddabadi.enumer.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,8 @@ public interface BankRepository extends JpaRepository<Bank, Long> {
     //untuk surat transfer tidak ada account kas
     @Query("select b from Bank b where b.kode <> :cari")
     Page<Bank> findAllNotKas(@Param("cari")String cari, Pageable pageable);
+
+    //get all active bank
+    Page<Bank> findByStatus(Status status, Pageable pageable);
 
 }

@@ -5,7 +5,9 @@ import com.ddabadi.domain.CoaDtl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -24,13 +26,18 @@ public interface BukuBesarTrialRepository extends JpaRepository<BukuBesarTrial, 
     );
 
     //view buku besar trial -> FILTER
-    Page<BukuBesarTrial> findByBulanTahunAndCoaDtlAndIdBankLikeAndRelLikeAndIdCustomerLike(
+    Page<BukuBesarTrial> findByBulanTahunAndCoaDtlAndRelLikeAndCustomerKodeLike(
             String bulanTahun,
             CoaDtl coaDtl,
-            String idBank,
             String rel,
-            String idCustomer,
+            String kodeCustomer,
             Pageable pageable
     );
 
+//    //view ALL DATA --Buku besar
+//    Page<BukuBesarTrial> findByBulanTahun(String bulanTahun, Pageable pageable);
+
+    //untuk laporan BB trial
+    List<BukuBesarTrial> findByBulanTahun(String bulanTahu, Sort sort);
+    List<BukuBesarTrial> findByBulanTahunAndCoaDtl(String bulanTahu, CoaDtl coaDtl,Sort  sort);
 }

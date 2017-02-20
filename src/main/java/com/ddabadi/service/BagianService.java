@@ -13,6 +13,9 @@ import java.util.List;
 public interface BagianService {
 
     public Page<Bagian> getByKodeByNamaPage(String kode, String nama,int hal, int jumlah);
+
+    public Page<Bagian> getByKodeByNamaAktifPage(String kode, String nama,int hal, int jumlah);
+
     public Bagian getById(Long id);
     public Bagian save(Bagian bagian);
     public Bagian update(Long idEdit, Bagian bagian);

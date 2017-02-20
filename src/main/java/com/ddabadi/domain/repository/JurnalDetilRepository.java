@@ -47,7 +47,7 @@ public interface JurnalDetilRepository extends JpaRepository<JurnalDetil,Long> {
             Double kredit,
             Pageable pageable);
 
-    // untuk tarik list jurnal ->proses surat transfer ---Bank, NO Urut
+    // untuk tarik list jurnal ->proses surat transfer ---Bank, NO Urut, Header approved
     Page<JurnalDetil> findByJurnalHeaderJenisVoucherAndJurnalHeaderStatusVoucherAndDebetAndBankAndJurnalHeaderNoUrutLikeAndJurnalHeaderIsTarikPembayaranIsFalseOrderByJurnalHeaderIssueDate(
             JenisVoucher jenisVoucher,
             StatusVoucher statusVoucher,
@@ -61,5 +61,28 @@ public interface JurnalDetilRepository extends JpaRepository<JurnalDetil,Long> {
 
     @Query(value = "select sum(d.kredit) from JurnalDetil d where d.jurnalHeader.id = :idHd ")
     Double findTotalKredit(@Param("idHd")Long idHd);
+
+
+    //list jurnal untuk isi bookdate
+    // 1. Kredit = kas POSTING
+    // 2. kredit <> kas, sudah tarik data/posting
+    @Query(value = "select d from  JurnalDetil d where d.id in " +
+            "( select d.id from JurnalDetil d where d.accountDetil.kodePerkiraan = :kodeKas " +
+            "  and d.jurnalHeader.statusVoucher = :statusVoucher and d.jurnalHeader.jenisVoucher = :jenisVoucher " +
+            "  and d.jurnalHeader.issueDate between :tglAwal and :tglAkhir " +
+            "  and d.jurnalHeader.isIsiBookDate =0 )  " +
+            "or d.id in" +
+            "( select d.id from JurnalDetil d where d.accountDetil.kodePerkiraan = :kodeBank " +
+            "  and d.jurnalHeader.isTarikPembayaran = true and d.jurnalHeader.isValidasiPembayaran = true " +
+            "  and d.jurnalHeader.statusVoucher = :statusVoucher and d.jurnalHeader.jenisVoucher = :jenisVoucher " +
+            "  and d.jurnalHeader.issueDate between :tglAwal and :tglAkhir  " +
+            "  and d.jurnalHeader.isIsiBookDate =0 ) ")
+    Page<JurnalDetil > getAllJurnalInputBooking(@Param("kodeKas")String kodeKas,
+                                                 @Param("kodeBank")String kodeBank,
+                                                 @Param("jenisVoucher")JenisVoucher jenisVoucher,
+                                                 @Param("statusVoucher")StatusVoucher statusVoucher,
+                                                 @Param("tglAwal")Date tglAwal,
+                                                 @Param("tglAkhir")Date tglAkhir,
+                                                 Pageable pageable);
 
 }

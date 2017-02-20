@@ -102,11 +102,18 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
 
         CoaDtl coaDtl = coaDtlService.getById(jurnalDetilDto.getAccountDetilId());
         jurnalDetil.setAccountDetil(coaDtl);
-        if(accrualConfig.getCoaPiutangUsaha().trim().equals(coaDtl.getKodePerkiraan().toString()) ){
-            noGeneratedPiutUsaha = fungsiUtil.createNoPiutangUsaha(jurnalHeader.getIssueDate());
-            jurnalDetil.setRel(noGeneratedPiutUsaha);
+
+//        if(accrualConfig.getCoaPiutangUsaha().trim().equals(coaDtl.getKodePerkiraan().toString()) ){
+        if(coaDtl.getAutoGenerateNo()==null ){
+            jurnalDetil.setRel("");
         }else{
-            jurnalDetil.setRel(jurnalDetilDto.getRel());
+            if(coaDtl.getAutoGenerateNo().equals(Boolean.TRUE) ){
+                noGeneratedPiutUsaha = fungsiUtil.createNoPiutangUsaha(jurnalHeader.getIssueDate());
+                jurnalDetil.setRel(noGeneratedPiutUsaha);
+            }else{
+                jurnalDetil.setRel(jurnalDetilDto.getRel());
+            }
+
         }
 
         Bagian bagian = bagianService.getByKode(jurnalDetilDto.getBagian());
@@ -212,7 +219,7 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
         }
         Bank bank = bankService.getById(idBank);
 
-            return jurnalDetilRepository.findByJurnalHeaderJenisVoucherAndJurnalHeaderStatusVoucherAndDebetAndBankAndJurnalHeaderNoUrutLikeAndJurnalHeaderIsTarikPembayaranIsFalseOrderByJurnalHeaderIssueDate(JenisVoucher.PENGELUARAN, StatusVoucher.UNPOSTING, 0D, bank,kriteriaNoUrut, pageRequest);
+        return jurnalDetilRepository.findByJurnalHeaderJenisVoucherAndJurnalHeaderStatusVoucherAndDebetAndBankAndJurnalHeaderNoUrutLikeAndJurnalHeaderIsTarikPembayaranIsFalseOrderByJurnalHeaderIssueDate(JenisVoucher.PENGELUARAN, StatusVoucher.POSTING, 0D, bank,kriteriaNoUrut, pageRequest);
     }
 
     @Override
@@ -227,6 +234,19 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
         Double hasil =0D;
         hasil = jurnalDetilRepository.findTotalKredit(idHdr);
         return hasil;
+    }
+
+    @Override
+    public Page<JurnalDetil> getAllJurnalForInputBooking(Date tglAwal, Date tglAkhir, int hal, int jumlah) {
+
+        String kodeKas = accrualConfigService.getConfig().getCoaKas();
+        String kodeBank = accrualConfigService.getConfig().getCoaBank();
+        Sort sort = new Sort(Sort.Direction.ASC,"id");
+        PageRequest pageRequest = new PageRequest(hal -1, jumlah,sort);
+
+        return jurnalDetilRepository.getAllJurnalInputBooking(kodeKas,kodeBank,JenisVoucher.PENGELUARAN,StatusVoucher.POSTING,tglAwal,tglAkhir,pageRequest);
+
+
     }
 
 }

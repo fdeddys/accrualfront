@@ -31,6 +31,7 @@ public class BukuBesarTrialServiceImpl implements BukuBesarTrialService {
     @Autowired private BukuBesarSaldoService bukuBesarSaldoService;
     @Autowired private AccrualConfigService accrualConfigService;
     @Autowired private CoaDtlService coaDtlService;
+    @Autowired private CustomerService customerService;
 
     @Override
     public BukuBesarTrial save(BukuBesarTrial bukuBesarTrial) {
@@ -150,7 +151,7 @@ public class BukuBesarTrialServiceImpl implements BukuBesarTrialService {
                 bukuBesarTrial.setKeterangan("( Saldo Bulan Lalu )");
                 bukuBesarTrial.setTotalDebet(0D);
                 bukuBesarTrial.setTotalKredit(0D);
-                bukuBesarTrial.setBagian(null);
+                bukuBesarTrial.setBagian(jurnalDetil.getBagian());
                 bukuBesarTrial.setNoUrut("");
                 bukuBesarTrial.setNoVoucher("");
                 bukuBesarTrial.setTglBooking(tglBook);
@@ -214,32 +215,148 @@ public class BukuBesarTrialServiceImpl implements BukuBesarTrialService {
             repository.save(bkBesarTrial);
         }
 
-        JurnalHeader jurnalHeader = jurnalHdrService.getById(jurnalHeaderId);
-        jurnalHeader.setStatusVoucher(StatusVoucher.POSTING);
-        jurnalHdrService.save(jurnalHeader);
-
-
+        setPosting(jurnalHeaderId);
     }
 
     @Override
+    public void setPosting(Long id){
+        JurnalHeader jurnalHeader = jurnalHdrService.getById(id);
+        jurnalHeader.setStatusVoucher(StatusVoucher.POSTING);
+        jurnalHdrService.save(jurnalHeader);
+    }
+
+    @Override
+    public void unPostingJurnalTrial(Long jurnalHeaderId) {
+        // 1. iterate jurnal detil
+        // 2. cek di buku besar trial transaksi
+        //   ambil saldo isi untuk proses jumlah berjalan LAST REC
+        // 3 isi buku besar trial
+        // 4.set posting true.
+
+
+
+        AccrualConfig accrualConfig = accrualConfigService.getConfig();
+        String blnTahunBerjalan  = accrualConfig.getBulanTahunBerjalan();
+        String blnTahunLalu = bukuBesarService.getTglProsesBulanLalu();
+
+        //1. iterate jurnal detil
+        Iterator<JurnalDetil> jurnalDetilIterator = jurnalDetilService.getByJurnalHdrId(jurnalHeaderId).iterator();
+        while (jurnalDetilIterator.hasNext()){
+            JurnalDetil jurnalDetil = jurnalDetilIterator.next();
+
+            Long kriteriaBank;
+            String kriteriaBank1;
+
+            Long kriteriaCust;
+            String kriteriaCust1;
+
+            String kriteriaRel;
+
+            Double totalBerjalan;
+
+
+            if(jurnalDetil.getBank()==null || jurnalDetil.getBank().equals("")){
+                kriteriaBank = 0l;
+                kriteriaBank1="%";
+            }else{
+                kriteriaBank = jurnalDetil.getBank().getId();
+                kriteriaBank1 = jurnalDetil.getBank().getKode();
+            }
+
+            if(jurnalDetil.getRel()==null || jurnalDetil.getRel().equals("-")){
+                kriteriaRel= "%";
+            }else{
+                kriteriaRel= jurnalDetil.getRel().trim();
+            }
+
+            if(jurnalDetil.getCustomer()==null || jurnalDetil.getCustomer().equals("")){
+                kriteriaCust= 0L;
+                kriteriaCust1="%";
+            }else{
+                kriteriaCust= jurnalDetil.getCustomer().getId();
+                kriteriaCust1= jurnalDetil.getCustomer().getKode();
+            }
+
+            ///2. cek di buku besar trial ada transaksi
+            List<BukuBesarTrial> bukuBesarTrials = repository.findByBulanTahunAndCoaDtlAndIdBankLikeAndRelLikeAndIdCustomerLikeOrderByIdDesc(blnTahunBerjalan, jurnalDetil.getAccountDetil(), kriteriaBank, kriteriaRel, kriteriaCust);
+
+            BukuBesarTrial bukuBesarTrial1 = bukuBesarTrials.iterator().next();
+            totalBerjalan = bukuBesarTrial1.getTotal_berjalan();
+
+
+            // 3 isi buku besar trial .
+            BukuBesarTrial bkBesarTrial = new BukuBesarTrial();
+
+            Double totalDK;
+            if(jurnalDetil.getAccountDetil().getIsDebet()){
+                totalDK = (jurnalDetil.getDebet() - jurnalDetil.getKredit())*-1;
+            }else{
+                totalDK = (jurnalDetil.getKredit() - jurnalDetil.getDebet())*-1;
+            }
+            totalBerjalan = totalBerjalan + totalDK;
+
+            bkBesarTrial.setBulanTahun(blnTahunBerjalan);
+            bkBesarTrial.setCoaDtl(jurnalDetil.getAccountDetil());
+            bkBesarTrial.setGroupAccount(jurnalDetil.getAccountDetil().getAccountHeader().getGroupAccount());
+            bkBesarTrial.setJurnalDetilId(jurnalDetil.getId());
+            bkBesarTrial.setTotalDebet(jurnalDetil.getDebet());
+            bkBesarTrial.setTotalKredit(jurnalDetil.getKredit());
+            bkBesarTrial.setTotal_berjalan(totalBerjalan);
+            bkBesarTrial.setKeterangan("BATAL POSTING " +jurnalDetil.getKeterangan().trim());
+            bkBesarTrial.setBagian(jurnalDetil.getBagian());
+            bkBesarTrial.setNoUrut(jurnalDetil.getJurnalHeader().getNoUrut());
+            bkBesarTrial.setNoVoucher(jurnalDetil.getJurnalHeader().getNoVoucher());
+            bkBesarTrial.setTglBooking(jurnalDetil.getJurnalHeader().getBookingDate());
+            bkBesarTrial.setPenerima(jurnalDetil.getJurnalHeader().getDiBayar());
+            if(kriteriaBank==0L){
+                bkBesarTrial.setBank(null);
+                bkBesarTrial.setIdBank(0L);
+            }else{
+                bkBesarTrial.setBank(jurnalDetil.getBank());
+                bkBesarTrial.setIdBank(jurnalDetil.getBank().getId());
+            }
+            if (kriteriaRel == "%") {
+                bkBesarTrial.setRel("-");
+            }else{
+                bkBesarTrial.setRel(jurnalDetil.getRel());
+            }
+            if(kriteriaCust==0L){
+                bkBesarTrial.setIdCustomer(0L);
+                bkBesarTrial.setCustomer(null);
+            }else{
+                bkBesarTrial.setIdCustomer(jurnalDetil.getCustomer().getId());
+                bkBesarTrial.setCustomer(jurnalDetil.getCustomer());
+            }
+            repository.save(bkBesarTrial);
+        }
+
+        JurnalHeader jurnalHeader = jurnalHdrService.getById(jurnalHeaderId);
+        jurnalHeader.setStatusVoucher(StatusVoucher.UNPOSTING);
+        jurnalHdrService.save(jurnalHeader);
+    }
+
+
+    @Override
     public Page<BukuBesarTrial> getBBTrialAll(int hal, int jumlah) {
-        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.idAccountDtl")
-                .and(new Sort(Sort.Direction.ASC, "bagian.id"))
+        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.kodePerkiraan")
+                .and(new Sort(Sort.Direction.ASC, "bagian.kode"))
                 .and(new Sort(Sort.Direction.ASC, "idCustomer"))
                 .and(new Sort(Sort.Direction.ASC,"rel"))
-                .and(new Sort(Sort.Direction.ASC,"idBank"));
+                .and(new Sort(Sort.Direction.ASC,"idBank"))
+                .and(new Sort(Sort.Direction.ASC,"id"));
         PageRequest pageRequest = new PageRequest(hal-1, jumlah,sort);
         return repository.findAll(pageRequest);
 
     }
 
     @Override
-    public Page<BukuBesarTrial> getBBTrialByIdCoaIdBankRelIdCust(Long idCoa,String idBank, String rel,String idCust, int hal, int jumlah) {
-        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.idAccountDtl")
-                .and(new Sort(Sort.Direction.ASC, "bagian.id"))
+    public Page<BukuBesarTrial> getBBTrialByIdCoaIdBankRelIdCust(Long idCoa, String rel,Long idCust, int hal, int jumlah) {
+        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.kodePerkiraan")
+                .and(new Sort(Sort.Direction.ASC, "bagian.kode"))
                 .and(new Sort(Sort.Direction.ASC, "idCustomer"))
                 .and(new Sort(Sort.Direction.ASC,"rel"))
-                .and(new Sort(Sort.Direction.ASC,"idBank"));
+                .and(new Sort(Sort.Direction.ASC,"idBank"))
+                .and(new Sort(Sort.Direction.ASC,"id"));
         PageRequest pageRequest = new PageRequest(hal-1, jumlah,sort);
 
         AccrualConfig accrualConfig = accrualConfigService.getConfig();
@@ -251,11 +368,11 @@ public class BukuBesarTrialServiceImpl implements BukuBesarTrialService {
         String kriteriaCust;
         String kriteriaRel;
 
-        if(idBank.equals("0") ){
-            kriteriaBank = "%";
-        }else{
-            kriteriaBank = idBank.toString();
-        }
+//        if(kodeBank.equals("0") ){
+//            kriteriaBank = "%";
+//        }else{
+//            kriteriaBank = kodeBank.toString();
+//        }
 
         if(rel.equals("--")){
             kriteriaRel= "%";
@@ -263,13 +380,44 @@ public class BukuBesarTrialServiceImpl implements BukuBesarTrialService {
             kriteriaRel= rel;
         }
 
-        if(idCust.equals("0") ){
+        if(idCust ==0L ){
             kriteriaCust= "%";
         }else{
-            kriteriaCust= idCust.toString();
+            Customer customer = customerService.getById(idCust);
+            kriteriaCust= customer.getKode();
         }
+//        kriteriaCust= idCust;
+        return repository.findByBulanTahunAndCoaDtlAndRelLikeAndCustomerKodeLike(blnTahunBerjalan, coaDtl, kriteriaRel, kriteriaCust, pageRequest);
+    }
 
-        return repository.findByBulanTahunAndCoaDtlAndIdBankLikeAndRelLikeAndIdCustomerLike(blnTahunBerjalan, coaDtl, kriteriaBank, kriteriaRel, kriteriaCust, pageRequest);
+    @Override
+    public List<BukuBesarTrial> getBBTrialAll() {
+
+        AccrualConfig accrualConfig = accrualConfigService.getConfig();
+        String blnTahunBerjalan  = accrualConfig.getBulanTahunBerjalan();
+
+        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.kodePerkiraan")
+                .and(new Sort(Sort.Direction.ASC, "bagian.kode"))
+                .and(new Sort(Sort.Direction.ASC, "idCustomer"))
+                .and(new Sort(Sort.Direction.ASC,"rel"))
+                .and(new Sort(Sort.Direction.ASC,"idBank"))
+                .and(new Sort(Sort.Direction.ASC,"id"));
+        return repository.findByBulanTahun(blnTahunBerjalan, sort);
+    }
+
+    @Override
+    public List<BukuBesarTrial> getBBTrialCoa(Long idCoa) {
+        AccrualConfig accrualConfig = accrualConfigService.getConfig();
+        CoaDtl coaDtl = coaDtlService.getById(idCoa);
+        String blnTahunBerjalan  = accrualConfig.getBulanTahunBerjalan();
+
+        Sort sort = new Sort(Sort.Direction.ASC,"coaDtl.kodePerkiraan")
+                .and(new Sort(Sort.Direction.ASC, "bagian.kode"))
+                .and(new Sort(Sort.Direction.ASC, "idCustomer"))
+                .and(new Sort(Sort.Direction.ASC,"rel"))
+                .and(new Sort(Sort.Direction.ASC,"idBank"))
+                .and(new Sort(Sort.Direction.ASC,"id"));
+        return repository.findByBulanTahunAndCoaDtl(blnTahunBerjalan,coaDtl, sort);
     }
 
 

@@ -49,6 +49,23 @@ public class CoaDtlController {
         }
     }
 
+
+    @RequestMapping(value = "active/kode/{kode}/hal/{hal}/jumlah/{jumlah}")
+    public Page<CoaDtl> getByKodeAktif(@PathVariable("kode")String kode,
+                                       @PathVariable("hal")int hal,
+                                       @PathVariable("jumlah")int jumlah){
+
+        String kriteriaPencarian;
+        if(kode.trim().equals("--")){
+            kriteriaPencarian = "%";
+
+        }else{
+            kriteriaPencarian=kode.trim()+"%";
+        }
+        return coaDtlService.getByKodeAktif(kriteriaPencarian,hal,jumlah);
+    }
+
+
     @RequestMapping(value = "/nama/{nama}/hal/{hal}/jumlah/{jumlah}")
     public Page<CoaDtl> getByNamaPage(@PathVariable("nama")String nama,
                                       @PathVariable("hal")int hal,

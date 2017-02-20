@@ -25,7 +25,7 @@ public class DirektoratServiceImpl implements DirektoratService {
     public List<Direktorat> getAll(String urut) {
         logger.info("getall");
 
-        Sort sort = new Sort(Sort.Direction.ASC,urut.trim());
+        Sort sort = new Sort(Sort.Direction.ASC,"kode");
 
         return repository.findAll(sort);
     }

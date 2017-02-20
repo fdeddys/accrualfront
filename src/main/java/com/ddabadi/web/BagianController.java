@@ -50,6 +50,13 @@ public class BagianController {
         return bagianService.getByKodeByNamaPage("%","%",hal,jumlah);
     }
 
+    @RequestMapping(value = "aktif/hal/{hal}/jumlah/{jumlah}")
+    public Page<Bagian> getAllAktifPage(@PathVariable("hal")int hal,
+                                        @PathVariable("jumlah")int jumlah){
+
+        return bagianService.getByKodeByNamaAktifPage("%", "%", hal, jumlah);
+    }
+
     @RequestMapping(value = "/kode/{kode}/nama/{nama}/hal/{hal}/jumlah/{jumlah}")
     public Page<Bagian> getAllPage(@PathVariable("kode")String kode,
                                    @PathVariable("nama")String nama,
@@ -57,6 +64,15 @@ public class BagianController {
                                    @PathVariable("jumlah")int jumlah){
 
         return bagianService.getByKodeByNamaPage("kode", "nama", hal, jumlah);
+    }
+
+    @RequestMapping(value = "aktif/kode/{kode}/nama/{nama}/hal/{hal}/jumlah/{jumlah}")
+    public Page<Bagian> getAllAktifPage(@PathVariable("kode")String kode,
+                                   @PathVariable("nama")String nama,
+                                   @PathVariable("hal")int hal,
+                                   @PathVariable("jumlah")int jumlah){
+
+        return bagianService.getByKodeByNamaAktifPage("kode", "nama", hal, jumlah);
     }
 
     @RequestMapping(value = "id/{id}")
@@ -81,6 +97,14 @@ public class BagianController {
         return bagianService.getByKodeByNamaPage(kode, "%", hal, jumlah);
     }
 
+    @RequestMapping(value = "aktif/kode/{kode}/hal/{hal}/jumlah/{jumlah}")
+    public Page<Bagian> getByKodeAktif(@PathVariable("kode")String kode,
+                                  @PathVariable("hal")int hal,
+                                  @PathVariable("jumlah")int jumlah){
+
+        return bagianService.getByKodeByNamaAktifPage(kode, "%", hal, jumlah);
+    }
+
 
     @RequestMapping(value = "isKodeExist/{kode}")
     public boolean isKodeBagianAda(@PathVariable("kode")String kode){
@@ -93,7 +117,15 @@ public class BagianController {
                             @PathVariable("hal")int hal,
                             @PathVariable("jumlah")int jumlah){
 
-        return bagianService.getByKodeByNamaPage("%",nama,hal,jumlah);
+        return bagianService.getByKodeByNamaPage("%", nama, hal, jumlah);
+    }
+
+    @RequestMapping(value = "aktif/nama/{nama}/hal/{hal}/jumlah/{jumlah}")
+    public Page<Bagian> getByNamaAktif( @PathVariable("nama")String nama,
+                                        @PathVariable("hal")int hal,
+                                        @PathVariable("jumlah")int jumlah){
+
+        return bagianService.getByKodeByNamaAktifPage("%",nama,hal,jumlah);
     }
 
     @RequestMapping(method = RequestMethod.POST,

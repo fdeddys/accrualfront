@@ -2,6 +2,7 @@ package com.ddabadi.domain.repository;
 
 import com.ddabadi.domain.JurnalHeader;
 import com.ddabadi.enumer.JenisVoucher;
+import com.ddabadi.enumer.Status;
 import com.ddabadi.enumer.StatusVoucher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ public interface JurnalHdrRepository extends JpaRepository<JurnalHeader,Long> {
     Page<JurnalHeader> findByTanggalIssue(@Param("tanggal1")Date tanggal1,
                                           @Param("tanggal2")Date tanggal2,
                                           Pageable pageable);
+
 
     Page<JurnalHeader> findByJenisVoucherAndIssueDateBetween(JenisVoucher jenisVoucher, Date tgl1, Date tgl2, Pageable pageable);
 
@@ -65,7 +67,7 @@ public interface JurnalHdrRepository extends JpaRepository<JurnalHeader,Long> {
                                                                                                            Pageable pageable);
 
     //list jurnal belum posting VOUCHER PEMBAYARAN REVISI tarik pembayaran
-    Page<JurnalHeader> findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsTrue(Date tgl1,
+    Page<JurnalHeader> findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsFalse(Date tgl1,
                                                                                                                              Date tgl2,
                                                                                                                              StatusVoucher statusVoucher,
                                                                                                                              JenisVoucher jenisVoucher,
@@ -77,5 +79,8 @@ public interface JurnalHdrRepository extends JpaRepository<JurnalHeader,Long> {
                                                                              StatusVoucher statusVoucher,
                                                                              JenisVoucher jenisVoucher,
                                                                              Pageable pageable);
+
+
+
 
 }

@@ -37,6 +37,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
     @Autowired private BankService bankService;
     @Autowired private BukuBesarTrialService bukuBesarTrialService;
     @Autowired private FungsiUtil fungsi;
+    @Autowired private AccrualConfigService accrualConfigService;
 
     private Logger logger = Logger.getLogger(JurnalHdrService.class);
 
@@ -95,7 +96,11 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
 
         User user = userService.getById(jurnalHeaderDto.getUser());
         JurnalHeader jurnalHeader = new JurnalHeader();
-        jurnalHeader.setBookingDate(null);
+        if(jurnalHeaderDto.getJenisVoucher().equals(JenisVoucher.PENGELUARAN)){
+            jurnalHeader.setBookingDate(null);
+        }else{
+            jurnalHeader.setBookingDate(tglIssue);
+        }
         jurnalHeader.setNoVoucher(null);
         jurnalHeader.setNoUrut(null);
         jurnalHeader.setDiBayar(jurnalHeaderDto.getDiBayar());
@@ -127,6 +132,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
         JurnalHeader jurnalHeader = repository.findOne(idHdr);
         jurnalHeader.setBookingDate(tglBook);
         jurnalHeader.setNoVoucher(fungsi.createNoVoucher(jurnalHeader.getJenisVoucher(), tglBook));
+        jurnalHeader.setIsIsiBookDate(true);
         repository.saveAndFlush(jurnalHeader);
 
         bukuBesarTrialService.postingJurnalTrial(idHdr);
@@ -198,40 +204,43 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
 
 
         // cek jika voucher balance debet dan kredit bisa
-
         String pesan="OK";
         JurnalHeader jurnalHeader = repository.findOne(idHdr);
-        Double totDebet = jurnalDetilService.getTotalDebet(idHdr);
-        Double totKredit = jurnalDetilService.getTotalKredit(idHdr);
-        System.out.println("total debet = " + totDebet + "  - " + totKredit);
         if(jurnalHeader.getStatusVoucher()==StatusVoucher.UNPOSTING){
 
             if(jurnalHeader.isTarikPembayaran()==true){
                 pesan = "Transaksi sudah pernah di tarik untuk pembayaran";
             }else{
-                //cek debet sama ga dg kredit
-                if(totDebet != totKredit){
-                    //delete
-                    Iterator<JurnalDetil> jurnalDetils = jurnalDetilService.getByJurnalHdrId(jurnalHeader.getId()).iterator();
-                    while(jurnalDetils.hasNext()){
-                        JurnalDetil jurnalDetil = jurnalDetils.next();
-                        jurnalDetilService.delete(jurnalDetil.getId());
-                    }
-                    repository.delete(jurnalHeader.getId());
-                    pesan="OK";
-                }else{
-                    //d/k belum ada-> cek ada detil tidak
-                    List<JurnalDetil> jurnalDetils = jurnalDetilService.getByJurnalHdrId(jurnalHeader.getId());
-                    if(jurnalDetils.size()>0){
-                        pesan = "Total Debet tidak boleh sama sama dengan Kredit ";
-                    }else{
+
+                // cek ada detil tidak transaksi
+                List<JurnalDetil> jurnalDetilss = jurnalDetilService.getByJurnalHdrId(jurnalHeader.getId());
+
+                if(jurnalDetilss.size()>0){
+                    Double totDebet = jurnalDetilService.getTotalDebet(idHdr);
+                    Double totKredit = jurnalDetilService.getTotalKredit(idHdr);
+                    System.out.println("total debet = " + totDebet + "  - " + totKredit);
+                    //cek debet sama ga dg kredit
+                    if (!(Double.compare(totDebet,totKredit)==0)){
+                        //delete
+                        Iterator<JurnalDetil> jurnalDetils = jurnalDetilService.getByJurnalHdrId(jurnalHeader.getId()).iterator();
+                        while(jurnalDetils.hasNext()){
+                            JurnalDetil jurnalDetil = jurnalDetils.next();
+                            jurnalDetilService.delete(jurnalDetil.getId());
+                        }
                         repository.delete(jurnalHeader.getId());
+                        pesan="OK";
+                    }else{
+                        pesan = "Total Debet sama dengan Kredit, data tidak bisa di hapus! ";
                     }
+
+                }else{
+                    //Detil belom ada. hapussss header
+                    repository.delete(jurnalHeader.getId());
                 }
             }
 
-
         }else{
+            //STATUS bukan UNPOSTING, tidak boleh hapus
             pesan="Status voucher = " + jurnalHeader.getStatusVoucher().toString();
         }
         return pesan;
@@ -342,7 +351,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
             // jika voucher pengeluaran di bedakan pakai IS_VALIDASI_PEMBAYARAN
             //return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsValidasiPembayaranIsFalse(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
 
-            return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsTrue(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
+            return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucherAndIsTarikPembayaranIsFalse(tgl1, tgl2, statusVoucher, jenisVoucher, pageRequest);
         }else{
             // jika NON voucher pengeluaran set POSTING = TRUE
             return repository.findByIssueDateBetweenAndNoUrutIsNotNullAndStatusVoucherAndJenisVoucher(tgl1, tgl2,statusVoucher,jenisVoucher,pageRequest);

@@ -37,4 +37,8 @@ public interface JurnalDetilService {
     Double getTotalDebet(Long idHdr);
     Double getTotalKredit(Long idHdr);
 
+    //List Jurnal untuk inpput booking
+    Page<JurnalDetil> getAllJurnalForInputBooking(Date tglAwal,Date tglAkhir,int hal, int jumlah);
+
+
 }

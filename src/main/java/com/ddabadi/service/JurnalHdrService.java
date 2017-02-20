@@ -47,4 +47,5 @@ public interface JurnalHdrService {
     //validasi voucher pengeluaran untuk ke surat transfer
     public String validasiPembayaran(Long idHdr);
 
+
 }

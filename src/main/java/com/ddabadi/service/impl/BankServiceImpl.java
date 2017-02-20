@@ -3,6 +3,7 @@ package com.ddabadi.service.impl;
 import com.ddabadi.domain.AccrualConfig;
 import com.ddabadi.domain.Bank;
 import com.ddabadi.domain.repository.BankRepository;
+import com.ddabadi.enumer.Status;
 import com.ddabadi.service.AccrualConfigService;
 import com.ddabadi.service.BankService;
 import org.apache.log4j.Logger;
@@ -101,6 +102,13 @@ public class BankServiceImpl implements BankService {
         bankUpdate.setStatus(bank.getStatus());
         bankUpdate.setKota(bank.getKota());
         return repository.save(bankUpdate);
+    }
+
+    @Override
+    public Page<Bank> getAllActive(int hal, int jumlah) {
+        Sort sort = new Sort(Sort.Direction.ASC,"kode");
+        PageRequest pageRequest = new PageRequest(hal-1, jumlah,sort);
+        return repository.findByStatus(Status.ACTIVE, pageRequest);
     }
 
 

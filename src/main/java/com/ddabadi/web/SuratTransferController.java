@@ -8,6 +8,7 @@ import com.ddabadi.dto.SuratTransferDtDto;
 import com.ddabadi.dto.SuratTransferHdDto;
 import com.ddabadi.exception.InvalidDateException;
 import com.ddabadi.exception.SuratTransferHadDetilException;
+import com.ddabadi.exception.SuratTransferSudahApproveException;
 import com.ddabadi.service.ParameterService;
 import com.ddabadi.service.SuratTransferService;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
@@ -141,7 +142,13 @@ public class SuratTransferController {
     SuratTransferHd approve(@PathVariable("idHd")Long idHd,
                             @PathVariable("idUser")Long idUser){
 
-        return suratTransferService.ApproveById(idHd, idUser);
+        SuratTransferHd hd = suratTransferService.getHdById(idHd);
+        if(hd.getIsApprove()==true){
+            throw new SuratTransferSudahApproveException();
+        }else{
+            return suratTransferService.ApproveById(idHd, idUser);
+        }
+
     }
 
 //    @RequestMapping(value = "dt/{id}",
