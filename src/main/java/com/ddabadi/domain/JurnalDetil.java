@@ -61,6 +61,9 @@ public class JurnalDetil {
     @JoinColumn(name = "jurnalHdr")
     private JurnalHeader jurnalHeader;
 
+    public JurnalDetil() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.ddabadi.web;
 
 import com.ddabadi.domain.AccrualConfig;
+import com.ddabadi.domain.JurnalDetil;
 import com.ddabadi.domain.JurnalHeader;
 import com.ddabadi.domain.User;
 import com.ddabadi.dto.JurnalBooking;
@@ -88,7 +89,8 @@ public class JurnalHdrController {
             method = RequestMethod.POST,
             consumes = "application/json")
     JurnalHeader save(@RequestBody JurnalHdrDto jurnalHeaderDto) throws ParseException {
-        return jurnalHdrService.save(jurnalHeaderDto);
+        JurnalHeader hdr=jurnalHdrService.save(jurnalHeaderDto);
+        return hdr;
     }
 
     @RequestMapping(value = "id/{idHdr}/user/{idUser}",

@@ -69,5 +69,10 @@ public class CoaHdrServiceImpl implements CoaHdrService {
         return coaHdr.getKodeBagian();
     }
 
+    @Override
+    public List<CoaHdr> getAllCoa() {
+        return repository.findAll();
+    }
+
 
 }

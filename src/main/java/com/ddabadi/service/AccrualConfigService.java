@@ -9,5 +9,4 @@ public interface AccrualConfigService {
 
     AccrualConfig getConfig();
     AccrualConfig updateConfig(AccrualConfig accrualConfig);
-
 }

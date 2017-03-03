@@ -47,6 +47,12 @@ public class CoaDtlServiceImpl implements CoaDtlService {
     }
 
     @Override
+    public CoaDtl getByKode(String kode) {
+        logger.info("get by kode" + kode);
+        return repository.findByKodePerkiraan(kode);
+    }
+
+    @Override
     public CoaDtl getById(Long id) {
         logger.info("get by id");
         return repository.findOne(id);

@@ -1,11 +1,19 @@
 package com.ddabadi.web;
 
+import com.ddabadi.Report.ReportController;
 import com.ddabadi.domain.CoaHdr;
+import com.ddabadi.domain.Parameter;
 import com.ddabadi.service.CoaHdrService;
+import com.ddabadi.service.ParameterService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by deddy on 5/3/16.
@@ -15,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class CoaHdrController {
 
     @Autowired private CoaHdrService coaHdrService;
+    @Autowired private ParameterService parameterService;
+
     private Logger logger = Logger.getLogger(CoaHdrService.class);
 
     @RequestMapping(value = "hal/{hal}/jumlah/{jumlah}")
@@ -104,5 +114,20 @@ public class CoaHdrController {
         logger.info("cek bagian by ");
         return coaHdrService.getBagianById(id);
     }
+    @RequestMapping(value = "laporan",
+            method = RequestMethod.GET)
+    public void laporanMasterBagian(HttpServletResponse response){
 
+        Parameter parameter = parameterService.get();
+        List<CoaHdr> coas = coaHdrService.getAllCoa();
+        //new ArrayList<Bagian>();
+        Map<String,Object> maps=new HashMap<String, Object>();
+        maps.put("h1",parameter.getH1().trim());
+        maps.put("h2",parameter.getH2().trim());
+        maps.put("h3",parameter.getH3().trim());
+        maps.put("h4",parameter.getH4().trim());
+
+        ReportController report= new ReportController();
+        report.previewReport("/report/master/MstCoaHdr.jasper", maps, coas, "laporan", response);
+    }
 }

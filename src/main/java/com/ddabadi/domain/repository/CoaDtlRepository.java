@@ -34,4 +34,5 @@ public interface CoaDtlRepository extends JpaRepository<CoaDtl,Long> {
                                                                               Pageable pageable);
 
     List<CoaDtl> findByAccountHeaderGroupAccountOrderByKodePerkiraan(GroupAccount groupAccount);
+    CoaDtl findByKodePerkiraan(String kodePerkiraan);
 }

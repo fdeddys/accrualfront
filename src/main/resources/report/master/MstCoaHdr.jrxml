@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="coahdr" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="225f37b5-1a89-4603-8f7a-9a686942f3bf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="h1" class="java.lang.String"/>
+	<parameter name="h2" class="java.lang.String"/>
+	<parameter name="h3" class="java.lang.String"/>
+	<parameter name="h4" class="java.lang.String"/>
+	<field name="kodeAccount" class="java.lang.String"/>
+	<field name="namaAccount" class="java.lang.String"/>
+	<field name="kodeBagian" class="java.lang.String"/>
+	<field name="groupAccount" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="59" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="304" height="14" uuid="05ba55a7-169a-417d-b413-2b63e0cdc04c"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="14" width="304" height="14" uuid="924cff80-d42a-44af-8d78-bc64a251b829"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="28" width="304" height="14" uuid="58cbfab8-9e78-4255-bfd6-5e22379611b0"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="42" width="304" height="14" uuid="857e111f-e083-4d7a-92aa-20fd4edf72cc"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{h4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="27" uuid="2149fcbf-4246-4253-b633-c285c6e6fdb0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kode COA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="1" width="236" height="26" uuid="7f867a2f-63c1-41f1-acd9-a4885ff0b0da"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama COA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="1" width="35" height="26" uuid="1b45e8a0-d8db-47a3-aacb-d9ee3297a73d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kode Bagian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="1" width="100" height="26" uuid="a89dfc53-31ef-41b9-af90-73fc37ac567e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Group COA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="27" width="416" height="1" uuid="be0035a4-96b6-475e-bd48-b600cb511a91"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="40" height="12" uuid="7ab8e70a-6a7f-4489-b1a3-073dee508b4b"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeAccount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="0" width="236" height="12" uuid="99ab1347-9f4c-4dbd-a186-abd2af3e6e52"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{namaAccount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="35" height="12" uuid="68f7fc89-bbd4-4e5d-a9d0-d32b0be52665"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeBagian}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="0" width="100" height="12" uuid="3a7d9bbd-bab1-40cc-8151-96d2b5c3859e"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{groupAccount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="532" y="0" width="23" height="13" uuid="7f232aef-41ec-451c-affd-01293b92ae2a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -19,6 +19,8 @@ public interface JurnalDetilRepository extends JpaRepository<JurnalDetil,Long> {
 
     @Query(value = "Select d from JurnalDetil d where d.jurnalHeader.id = :cari ")
     List<JurnalDetil> findByJurnalHdrId(@Param("cari")Long cari);
+    @Query(value = "Select d from JurnalDetil d where d.jurnalHeader.id = :cari and d.kredit > :kredit and d.bank.id > :bank and substring(d.accountDetil.kodePerkiraan,1,1)=:coa ")
+    List<JurnalDetil> findByJurnalHdrIdAndKredit(@Param("cari")Long cari, @Param("kredit") Double kredit, @Param("bank") Long bank,@Param("coa") String coa);
 
     @Query(value = "Select d from JurnalDetil d where d.jurnalHeader.id = :cari ")
     Page<JurnalDetil> findByJurnalHdrIdPage(@Param("cari")Long cari, Pageable pageable);

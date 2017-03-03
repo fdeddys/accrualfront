@@ -18,7 +18,8 @@ public interface CoaHdrService {
     CoaHdr save(CoaHdr coaHdr);
     CoaHdr update(Long id,CoaHdr coaHdr);
     String getBagianById(Long id);
-
+    //utk preview laporan
+    List<CoaHdr> getAllCoa();
 
 
 }

@@ -170,6 +170,35 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
     }
 
     @Override
+    public void saveOtomatis(JurnalHeader jurnalHeader, JurnalDetil jurnalDetil) {
+        JurnalDetil detilKredit=new JurnalDetil();
+
+        //insert bank di kredit
+        detilKredit.setAccountDetil(coaDtlService.getByKode(accrualConfigService.getConfig().getCoaBank()));
+        detilKredit.setJurnalHeader(jurnalHeader);
+        detilKredit.setRel(jurnalDetil.getRel());
+        detilKredit.setBagian(jurnalDetil.getBagian());
+        detilKredit.setCustomer(jurnalDetil.getCustomer());
+        detilKredit.setKredit(jurnalDetil.getKredit());
+        detilKredit.setDebet(0D);
+        detilKredit.setKeterangan(jurnalDetil.getKeterangan());
+        jurnalDetilRepository.saveAndFlush(detilKredit);
+
+        //insert hutang di debet (pengurangan hutang)
+        JurnalDetil detilDebet = new JurnalDetil();
+        detilDebet.setAccountDetil(jurnalDetil.getAccountDetil());
+        detilDebet.setJurnalHeader(jurnalHeader);
+        detilDebet.setRel(jurnalDetil.getRel());
+        detilDebet.setBagian(jurnalDetil.getBagian());
+        detilDebet.setBank(jurnalDetil.getBank());
+        detilDebet.setCustomer(jurnalDetil.getCustomer());
+        detilDebet.setKredit(0D);
+        detilDebet.setDebet(jurnalDetil.getKredit());
+        detilDebet.setKeterangan(jurnalDetil.getKeterangan());
+        jurnalDetilRepository.saveAndFlush(detilDebet);
+    }
+
+    @Override
     public Integer delete(Long idJurnalDetil) {
         int  hasil=0;
 
@@ -247,6 +276,11 @@ public class JurnalDetilServiceImpl implements JurnalDetilService {
         return jurnalDetilRepository.getAllJurnalInputBooking(kodeKas,kodeBank,JenisVoucher.PENGELUARAN,StatusVoucher.POSTING,tglAwal,tglAkhir,pageRequest);
 
 
+    }
+
+    @Override
+    public List<JurnalDetil> getJurnalHdrIdAndKredit(Long cari) {
+        return jurnalDetilRepository.findByJurnalHdrIdAndKredit(cari,0D, 0L,"2");
     }
 
 }

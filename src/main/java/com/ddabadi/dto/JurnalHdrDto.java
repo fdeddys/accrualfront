@@ -96,4 +96,5 @@ public class JurnalHdrDto {
     public void setUser(Long user) {
         this.user = user;
     }
+
 }

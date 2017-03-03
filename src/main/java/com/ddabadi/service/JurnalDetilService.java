@@ -2,6 +2,7 @@ package com.ddabadi.service;
 
 import com.ddabadi.domain.*;
 import com.ddabadi.dto.JurnalDetilDto;
+import com.ddabadi.dto.JurnalOtomatisDto;
 import com.ddabadi.enumer.JenisVoucher;
 import com.ddabadi.enumer.StatusVoucher;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public interface JurnalDetilService {
 
     JurnalDetil save(JurnalDetilDto jurnalDetilDto);
     JurnalDetil saveJurnalDetil(JurnalDetil jurnalDetil);
+    void saveOtomatis(JurnalHeader jurnalHeader, JurnalDetil jurnalDetil );
+
     public Integer delete(Long idJurnalDetil);
 
     //untuk proses tutup bulan
@@ -39,6 +42,7 @@ public interface JurnalDetilService {
 
     //List Jurnal untuk inpput booking
     Page<JurnalDetil> getAllJurnalForInputBooking(Date tglAwal,Date tglAkhir,int hal, int jumlah);
-
+    //List Jurnal Kredit >0, jurnal pemindahan, coa=coa passiva,2
+    List<JurnalDetil>getJurnalHdrIdAndKredit(Long cari);
 
 }

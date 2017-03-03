@@ -5,6 +5,8 @@ import com.ddabadi.domain.repository.AccrualConfigRepository;
 import com.ddabadi.service.AccrualConfigService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,5 +69,6 @@ public class AccrualConfigServiceImpl implements AccrualConfigService {
         //}
         return  accrualConfig;
     }
+
 
 }

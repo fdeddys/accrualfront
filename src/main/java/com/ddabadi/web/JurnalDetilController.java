@@ -2,11 +2,14 @@ package com.ddabadi.web;
 
 import com.ddabadi.Report.ReportController;
 import com.ddabadi.domain.JurnalDetil;
+import com.ddabadi.domain.JurnalHeader;
 import com.ddabadi.domain.Parameter;
 import com.ddabadi.dto.JurnalDetilDto;
+import com.ddabadi.enumer.JenisVoucher;
 import com.ddabadi.exception.BankNotFoundException;
 import com.ddabadi.exception.InvalidDateException;
 import com.ddabadi.service.JurnalDetilService;
+import com.ddabadi.service.JurnalHdrService;
 import com.ddabadi.service.ParameterService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by deddy on 5/7/16.
@@ -31,6 +31,7 @@ public class JurnalDetilController {
 
     private Logger logger= Logger.getLogger(JurnalDetilController.class);
     @Autowired private JurnalDetilService jurnalDetilService;
+    @Autowired private JurnalHdrService jurnalHdrService;
     @Autowired private ParameterService parameterService;
 
     @RequestMapping(value = "id/{id}")
@@ -139,5 +140,23 @@ public class JurnalDetilController {
 
 
     }
+    @RequestMapping(value = "listJurnalPemindahan/id/{id}",method = RequestMethod.GET   )
+    public List<String> listJurnalPemindahan(@PathVariable("id")Long id) {
+        JurnalHeader hdr = jurnalHdrService.getById(id);
+        ArrayList<String> noUrut=new ArrayList<String>();
+        JurnalHeader jh=new JurnalHeader();
+        if (hdr.getJenisVoucher() == JenisVoucher.PEMINDAHAN) {
+            //check jika ada coa passiva di kredit
+            List<JurnalDetil> detils = jurnalDetilService.getJurnalHdrIdAndKredit(hdr.getId());
+            if (detils.size() > 0) {
+                for (JurnalDetil d : detils) {
+                    jh=jurnalHdrService.saveOtomatis(hdr);
+                    noUrut.add(jh.getNoUrut());
+                    jurnalDetilService.saveOtomatis(jh, d);
+                }
+            }
+        }
+        return noUrut;
+    }
 
-}
+    }

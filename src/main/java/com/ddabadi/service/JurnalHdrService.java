@@ -28,6 +28,7 @@ public interface JurnalHdrService {
 
     JurnalHeader save(JurnalHdrDto jurnalHeaderDto) throws ParseException;
     JurnalHeader save(JurnalHeader jurnalHeader) ;
+    JurnalHeader saveOtomatis(JurnalHeader jurnalHeader);
 
     boolean posting(Long idHdr);
     String deleteFisikVoucher(Long idHdr);

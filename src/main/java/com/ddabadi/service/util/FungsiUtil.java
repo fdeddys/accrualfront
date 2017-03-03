@@ -69,7 +69,6 @@ public class    FungsiUtil {
         hasil = user.getInitial().toUpperCase() + tahunHasil +hasil;
 
         idxNoUrutService.save(idxNoUrut);
-
         return  hasil;
     }
 

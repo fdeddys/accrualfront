@@ -158,6 +158,7 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
             // jika no urut sudah ada tidak boleh create no urut lagi
             if(jurnalHeader.getNoUrut()=="" ||jurnalHeader.getNoUrut()==null  ){
                 jurnalHeader.setNoUrut(fungsi.createNoUrut(jurnalHeaderDto.getUser(), tglIssue));
+
             }
 
             // jika no voucher sudah ada tidak boleh create no vouch lagi
@@ -183,6 +184,25 @@ public class JurnalHdrServiceImpl implements JurnalHdrService {
     @Override
     public JurnalHeader save(JurnalHeader jurnalHeader) {
         return repository.saveAndFlush(jurnalHeader);
+    }
+
+    @Override
+    public JurnalHeader saveOtomatis(JurnalHeader jurnalHeader) {
+
+
+        // tanggal booking bisa ganti sesuai tgl issue
+        JurnalHeader hdr=new JurnalHeader();
+        hdr.setIssueDate(jurnalHeader.getIssueDate());
+        hdr.setBookingDate(jurnalHeader.getIssueDate());
+        hdr.setDiBayar("");
+        hdr.setJenisVoucher(JenisVoucher.PENGELUARAN);
+        hdr.setStatusVoucher(StatusVoucher.UNPOSTING);
+        hdr.setUser(jurnalHeader.getUser());
+
+        JurnalHeader hd=repository.saveAndFlush(hdr);
+        hd.setNoUrut(fungsi.createNoUrut(hd.getUser().getId(), hd.getIssueDate()));
+        hd.setNoVoucher(fungsi.createNoVoucher(hd.getJenisVoucher(), hd.getIssueDate()));
+        return save(hd);
     }
 
     @Override
